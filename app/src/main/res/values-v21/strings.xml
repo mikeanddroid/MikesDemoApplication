@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="more">MORE</string>
+    <string name="example_application">Example application</string>
+    <string name="insta_auth_demo">Insta Auth Demo</string>
+    <string name="yelp_auth_demo">Yelp Auth Demo</string>
+    <string name="launch_demo">LAUNCH DEMO</string>
+    <string name="details_trans">detailstransition</string>
+</resources>

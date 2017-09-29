@@ -1,0 +1,320 @@
+package com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.ui;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.maps.android.clustering.ClusterManager;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome.Prefs;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.R;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.adapters.LocationListAdapter;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.adapters.realmutils.RealmResultsAdapter;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.adapters.realmutils.ResultsAdapter;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.data.BaseModel;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.data.Location;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.data.Results;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.presenter.ActionPresenter;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.presenter.ActionPresenterImplementation;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.presenter.SearchInteractorImplementation;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.presenter.UIHandler;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.service.ApiCall.FetchBBVAData;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.service.OttoHelper;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.service.RealmController;
+import com.squareup.otto.Subscribe;
+
+import java.util.Random;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+
+import static com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome.AppConstants.IMAGE_URL_KEY;
+import static com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome.AppConstants.LOCATION_ADDRESS_KEY;
+import static com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome.AppConstants.LOCATION_GEO_KEY;
+import static com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome.AppConstants.LOCATION_NAME_KEY;
+import static com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome.AppConstants.LOCATION_RATING_KEY;
+
+public class MapListFragment extends Fragment implements UIHandler {
+
+    public static final String TAG = MapListFragment.class.getSimpleName();
+
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+
+    private LocationListAdapter locationListAdapter;
+    protected Realm realm;
+
+    private ProgressDialog progressDialog;
+    private ActionPresenter presenter;
+
+    private ResultsAdapter resultsAdapter;
+
+    ClusterManager<Location> locationClusterManager;
+    private Random random = new Random(1984);
+
+    private StaggeredGridLayoutManager staggeredGridLayoutManager;
+
+    public static MapListFragment newInstance() {
+        return new MapListFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        realm = RealmController.with(getActivity()).getRealm();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.list_fragment, container, false);
+
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
+        ButterKnife.bind(this, view);
+
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Fetching Data");
+        progressDialog.setTitle("Please wait");
+        presenter = new ActionPresenterImplementation(this, new SearchInteractorImplementation());
+
+        setupRecyclerView();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // refresh the realm instance
+                RealmController.with(getActivity()).refresh();
+
+                // get all persisted objects
+                // create the helper adapter and notify data set changes
+                // changes will be reflected automatically
+                setRealmAdapter(RealmController.with(getActivity()).getResults());
+            }
+        }, 400);
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        // Register Otto
+        OttoHelper.register(this);
+
+        presenter.onResume();
+
+        BaseModel model = null;
+        if (!Prefs.with(getActivity()).getPreLoad()) {
+            model = RealmController.with(getActivity()).getBaseModel();
+
+            if (model != null) {
+                Log.d(TAG, "onResume : Map List : Status : Pre-loaded CACHED " + model.getStatus());
+            } else {
+                Log.d(TAG, "onResume : Map List : Status : Pre-loaded NOT CACHED : Network Call");
+                setResultsData();
+            }
+
+        } else {
+            Log.d(TAG, "onResume : Map List : Status : NETWORK CALL");
+            // Create default request for fetching bbva details
+            setResultsData();
+        }
+
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        // UnRegister Otto
+        OttoHelper.unregister(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
+    @Subscribe
+    public void onResultSuccess(FetchBBVAData.SuccessEvent successEvent) {
+        Log.d(TAG, "onResultSuccess : MapList : Status : " + successEvent.getBaseModel().getStatus());
+        setItems(successEvent.getBaseModel());
+    }
+
+    @Subscribe
+    public void onResultFailure(FetchBBVAData.FailureEvent failureEvent) {
+        Log.d(TAG, " onResultFailure : Base Model : Status : " + failureEvent.getErrorMessage());
+
+        onQueryExceeded();
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setMessage("Query Limit Exceeded");
+        alertDialogBuilder.setCancelable(false);
+
+        alertDialogBuilder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                getActivity().finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        if (isVisible()) {
+            if (alertDialog != null && alertDialog.isShowing()) {
+                alertDialog.dismiss();
+            }
+
+            if (alertDialog != null) {
+                alertDialog.show();
+            }
+        }
+
+    }
+
+    private void setupRecyclerView() {
+        resultsAdapter = new ResultsAdapter(getActivity());
+        recyclerView.setAdapter(resultsAdapter);
+    }
+
+    public void refreshListItems(BaseModel baseModel) {
+        ResultsAdapter resultsAdapter = new ResultsAdapter(getActivity());
+        resultsAdapter.swapData(baseModel);
+    }
+
+    private void setResultsData() {
+        presenter.onResultsFetch();
+        Prefs.with(getActivity()).setPreLoad(true);
+    }
+
+    @Override
+    public void showProgress() {
+
+        if (isVisible()) {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.hide();
+            }
+
+            if (progressDialog != null) {
+                progressDialog.show();
+            }
+        }
+
+    }
+
+    @Override
+    public void hideProgress() {
+        progressDialog.hide();
+    }
+
+    @Override
+    public void onDataComplete() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onQueryExceeded() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void setItems(final BaseModel items) {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (realm == null) {
+                    realm = RealmController.with(getActivity()).getRealm();
+                }
+
+                RealmList<Results> resultsRealmList = null;
+                if (items != null) {
+                    Log.d(TAG, " Fragment : Base Model : MVP : Status : " + items.getStatus());
+                    resultsRealmList = items.getResults();
+                }
+
+                RealmResults<Results> realmResults = realm.where(Results.class).findAll();
+
+                if (resultsRealmList != null) {
+                    for (Results results : resultsRealmList) {
+                        Log.d(TAG, " Fragment : Results Model : MVP : address : " + results.getFormattedAddress());
+
+                        final String locationTitle = results.getLocationName();
+                        final String rating = results.getRating();
+                        final String formattedAddress = results.getFormattedAddress();
+
+                        final String imageUrl = results.getIcon();
+
+                        Log.d(TAG, " Fragment : Results Model : Location Icon : " + imageUrl);
+                        Log.d(TAG, " Fragment : Results Model : Location Title : " + locationTitle);
+                        Log.d(TAG, " Fragment : Results Model : Location Rating : " + rating);
+                        Log.d(TAG, " Fragment : Results Model : Location Address : " + formattedAddress);
+
+                    }
+                }
+
+                setRealmAdapter(realmResults);
+                progressDialog.hide();
+            }
+        }, 500);
+
+    }
+
+    public void setRealmAdapter(RealmResults<Results> realmResults) {
+
+        RealmResultsAdapter realmResultsAdapter = new RealmResultsAdapter(realmResults);
+
+        if (resultsAdapter == null) {
+            resultsAdapter = new ResultsAdapter(getActivity());
+        }
+
+        resultsAdapter.setEventListener(new ResultsAdapter.EventListener() {
+            @Override
+            public void onItemClick(int position, Results results) {
+                // Navigate to details view
+                Intent detailsIntent = new Intent(getActivity(), MapLocationDetails.class);
+                detailsIntent.putExtra(IMAGE_URL_KEY, results.getIcon());
+                detailsIntent.putExtra(LOCATION_GEO_KEY, results.getGeometry().getPlaceLocation().toString());
+                detailsIntent.putExtra(LOCATION_NAME_KEY, results.getLocationName());
+                detailsIntent.putExtra(LOCATION_ADDRESS_KEY, results.getFormattedAddress());
+                detailsIntent.putExtra(LOCATION_RATING_KEY, results.getRating());
+                getActivity().startActivity(detailsIntent);
+
+                presenter.onItemClicked(position);
+            }
+        });
+        resultsAdapter.setRealmAdapter(realmResultsAdapter);
+        resultsAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+}
