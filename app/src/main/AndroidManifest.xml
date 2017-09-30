@@ -42,6 +42,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/api_key" />
 
+        <!--Instagram stuff-->
+
+        <activity android:name=".instaauth.activities.InstagramDemoLogin" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".instaauth.activities.LandingPage" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".instaauth.core.CoreActivity" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".instaauth.activities.MediaList" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".instaauth.activities.MediaListDetails" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".instaauth.activities.TagSearchPage" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".instaauth.activities.TagsPage" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <!---->
     </application>
 
 </manifest>

@@ -318,5 +318,6 @@
     <color name="blue_grey_9">#455A64</color>
     <color name="blue_grey_10">#37474F</color>
     <color name="blue_grey_11">#263238</color>
+    <color name="white">#ffffff</color>
 
 </resources>

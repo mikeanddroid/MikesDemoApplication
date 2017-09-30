@@ -172,7 +172,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
         // Create default request for fetching bbva details
         FetchBBVAData fetchBBVAData = new FetchBBVAData();
-        fetchBBVAData.call(new FetchBBVAData.OnResultsComplete() {
+        fetchBBVAData.fetchBBVADetails(new FetchBBVAData.OnResultsComplete() {
             @Override
             public void onResultsFetched(SearchInteractor.OnSearchFinished listener, BaseModel baseModel) {
                 Log.d(TAG, " Fragment MAP: onResultsFetched : MVP : Status : " + baseModel.getStatus());

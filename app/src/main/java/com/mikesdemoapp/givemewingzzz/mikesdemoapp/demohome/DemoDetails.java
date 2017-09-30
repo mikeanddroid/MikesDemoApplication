@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mikesdemoapp.givemewingzzz.mikesdemoapp.R;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.instaauth.activities.LandingPage;
 import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.base.MapsClusterActivity;
 
 import butterknife.BindView;
@@ -116,6 +117,7 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
                 intent = new Intent(DemoDetails.this, MapsClusterActivity.class);
                 break;
             case 1:
+                intent = new Intent(DemoDetails.this, LandingPage.class);
                 break;
             case 2:
                 break;

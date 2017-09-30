@@ -20,7 +20,7 @@ public class SearchInteractorImplementation implements SearchInteractor, FetchBB
         realm = RealmController.with(MikesDemoApplication.getInstance()).getRealm();
 
         FetchBBVAData fetchBBVAData = new FetchBBVAData();
-        fetchBBVAData.call(this);
+        fetchBBVAData.fetchBBVADetails(this);
 
     }
 

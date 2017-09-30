@@ -23,13 +23,14 @@ public class FetchBBVAData {
     private static final String TAG = FetchBBVAData.class.getSimpleName();
     private static final String QUERY_LIMIT = "OVER_QUERY_LIMIT";
 
-    public void call(final OnResultsComplete onResultsComplete) {
+    public void fetchBBVADetails(final OnResultsComplete onResultsComplete) {
 
-        Log.d(TAG, " Response call : FetchBBVAData");
+        Log.d(TAG, " Response fetchBBVADetails : FetchBBVAData");
 
         RetrofitInterface retrofitInterface = BaseClient.getBBSIClient();
 
-        Call<BaseModel> call = retrofitInterface.getBBVALocations(AppConstants.API_KEYS.MAP_API_KEY_8);
+        final Call<BaseModel> call = retrofitInterface.getBBVALocations(AppConstants.API_KEYS.MAP_API_KEY_8);
+
         call.enqueue(new Callback<BaseModel>() {
             @Override
             public void onResponse(final Response<BaseModel> response, Retrofit retrofit) {
@@ -39,49 +40,50 @@ public class FetchBBVAData {
 
                 if (QUERY_LIMIT.equals(responseStatus) || QUERY_LIMIT.contains(responseStatus)) {
                     onResultsComplete.onResultsQueryLimit(responseStatus);
-                }
+                } else {
 
-                Log.d(TAG, " Response : Size : " + response.body().getResults().size() + " : Response Code : " + response.code());
+                    Log.d(TAG, " Response : Size : " + response.body().getResults().size() + " : Response Code : " + response.code());
 
-                List<Results> resultsList = response.body().getResults();
+                    List<Results> resultsList = response.body().getResults();
 
-                final int resultSize = resultsList.size();
+                    final int resultSize = resultsList.size();
 
-                Log.d(TAG, " Response Results : Size : " + resultSize);
+                    Log.d(TAG, " Response Results : Size : " + resultSize);
 
-                for (int i = 0; i < resultSize; i++) {
-                    Log.d(TAG, "Fetch BBVA Data Results : Formatted Address :" + resultsList.get(i).getFormattedAddress());
-                }
-
-                try {
-
-                    Realm realm = Realm.getDefaultInstance();
-
-                    final BaseModel baseModel = response.body();
-                    realm.beginTransaction();
-                    realm.deleteAll();
-
-                    if (baseModel != null) {
-                        realm.copyToRealm(baseModel);
-                        realm.copyToRealmOrUpdate(resultsList);
+                    for (int i = 0; i < resultSize; i++) {
+                        Log.d(TAG, "Fetch BBVA Data Results : Formatted Address :" + resultsList.get(i).getFormattedAddress());
                     }
 
-                    realm.commitTransaction();
+                    try {
 
-                    onResultsComplete.onResultsFetched(new SearchInteractor.OnSearchFinished() {
-                        @Override
-                        public void onFinished(BaseModel items) {
-                            OttoHelper.post(new SuccessEvent(items, response));
+                        Realm realm = Realm.getDefaultInstance();
+
+                        final BaseModel baseModel = response.body();
+                        realm.beginTransaction();
+                        realm.deleteAll();
+
+                        if (baseModel != null) {
+                            realm.copyToRealm(baseModel);
+                            realm.copyToRealmOrUpdate(resultsList);
                         }
 
-                        @Override
-                        public void onQueryLimit() {
-                            OttoHelper.post(new FailureEvent(responseStatus));
-                        }
-                    }, baseModel);
+                        realm.commitTransaction();
 
-                } catch (NullPointerException npe) {
-                    Log.e(TAG + ":: Error :: ", "Missing element somewhere in location response", npe);
+                        onResultsComplete.onResultsFetched(new SearchInteractor.OnSearchFinished() {
+                            @Override
+                            public void onFinished(BaseModel items) {
+                                OttoHelper.post(new SuccessEvent(items, response));
+                            }
+
+                            @Override
+                            public void onQueryLimit() {
+                                OttoHelper.post(new FailureEvent(responseStatus));
+                            }
+                        }, baseModel);
+
+                    } catch (NullPointerException npe) {
+                        Log.e(TAG + ":: Error :: ", "Missing element somewhere in location response", npe);
+                    }
                 }
 
             }

@@ -13,6 +13,7 @@ public class AppConstants {
     }
 
     public static final String BASE_URL = "https://maps.googleapis.com";
+    public static final String INSTA_BASE_URL = "https://maps.googleapis.com";
     public static final String BASE_IMAGE_URL = "https://maps.googleapis.com";
 
     // Intent Keys
