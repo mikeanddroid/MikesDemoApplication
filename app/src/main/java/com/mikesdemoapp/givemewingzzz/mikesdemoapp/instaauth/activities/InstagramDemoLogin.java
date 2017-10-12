@@ -31,12 +31,14 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.mikesdemoapp.givemewingzzz.mikesdemoapp.instaauth.utils.AppConstants.AUTHURL;
+
 /**
  * Created by GiveMeWingzz on 1/11/2016.
  */
 public class InstagramDemoLogin extends CoreActivity {
 
-    public static final String BASE_AUTH_URL = "https://api.instagram.com";
+    public static final String BASE_AUTH_URL = AUTHURL;
     public static String CALLBACKURL = "http://www.view-unlimited.com";
     private static final String ACCESS_TOKEN_COOKIE = "at";
     private static final String USER_TOKEN_COOKIE = "ut";

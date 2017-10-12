@@ -1,19 +1,23 @@
 package com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Path;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.Spanned;
 import android.transition.Explode;
 import android.transition.Fade;
+import android.transition.PathMotion;
 import android.transition.Slide;
+import android.transition.Visibility;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -45,7 +49,8 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
 
     int repo_position;
 
-    AppConstants.TransitionType type;
+    AppConstants.TransitionType transitionType;
+    AppConstants.TransitionType transitionType2;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +60,8 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
 
         setContentView(R.layout.git_item_details);
 
-        type = (AppConstants.TransitionType) getIntent().getSerializableExtra(AppConstants.KEY_ANIM_TYPE);
+        transitionType = (AppConstants.TransitionType) getIntent().getSerializableExtra(AppConstants.KEY_ANIM_TYPE);
+        transitionType2 = (AppConstants.TransitionType) getIntent().getSerializableExtra(AppConstants.KEY_ANIM_TYPE2);
 
         ButterKnife.bind(this);
 
@@ -126,13 +132,35 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
 
         }
 
-        startActivity(intent);
+        if (intent != null) {
+            startActivity(intent);
+        } else {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("No Application Found");
+            builder.setMessage("No application found with that selected item in the list. The application will be added soon and you will be notified.");
+            builder.setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+        }
 
     }
 
     private void initAnimation() {
 
-        switch (type) {
+        switch (transitionType) {
 
             case Explode: { // For Explode By Code
                 Explode enterTransition = new Explode();
@@ -143,9 +171,9 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
 
             case Slide: { // For Slide By Code
                 Slide enterTransition = new Slide();
-                enterTransition.setSlideEdge(Gravity.TOP);
-                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_long));
-                enterTransition.setInterpolator(new AnticipateOvershootInterpolator());
+                enterTransition.setSlideEdge(Gravity.START);
+                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_very_long));
+//                enterTransition.setInterpolator(new AnticipateOvershootInterpolator());
                 getWindow().setEnterTransition(enterTransition);
                 break;
             }
@@ -153,6 +181,40 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
             case Fade: { // For Fade By Code
                 Fade enterTransition = new Fade();
                 enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+                getWindow().setEnterTransition(enterTransition);
+                break;
+            }
+
+        }
+
+        switch (transitionType2) {
+
+            case Explode: { // For Explode By Code
+                Explode enterTransition = new Explode();
+                enterTransition.setPathMotion(new PathMotion() {
+                    @Override
+                    public Path getPath(float v, float v1, float v2, float v3) {
+                        return null;
+                    }
+                });
+                enterTransition.setMode(Visibility.MODE_IN);
+                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_medium));
+                getWindow().setEnterTransition(enterTransition);
+                break;
+            }
+
+            case Slide: { // For Slide By Code
+                Slide enterTransition = new Slide();
+                enterTransition.setSlideEdge(Gravity.START);
+                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_very_long));
+//                enterTransition.setInterpolator(new AnticipateOvershootInterpolator());
+                getWindow().setEnterTransition(enterTransition);
+                break;
+            }
+
+            case Fade: { // For Fade By Code
+                Fade enterTransition = new Fade();
+                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_long));
                 getWindow().setEnterTransition(enterTransition);
                 break;
             }

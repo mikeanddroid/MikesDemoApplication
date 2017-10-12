@@ -26,8 +26,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:orientation="vertical"
-                android:padding="6dip"
-                android:transitionName="@string/details_trans">
+                android:padding="6dip">
 
                 <LinearLayout
                     android:layout_width="match_parent"

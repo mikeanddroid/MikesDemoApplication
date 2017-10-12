@@ -23,6 +23,8 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.support.v4.app.ActivityOptionsCompat.makeSceneTransitionAnimation;
+
 public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapter.ItemClickListener {
 
     public static final String TAG = DemoHomeActivity.class.getSimpleName();
@@ -103,8 +105,15 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
         return super.onOptionsItemSelected(item);
     }
 
+    public static final int REPO_NAME_VIEW_TYPE = 1;
+    public static final int REPO_DESC_VIEW_TYPE = 2;
+    public static final int REPO_IMAGE_VIEW_TYPE = 3;
+    public static final int REPO_MORE_VIEW_TYPE = 4;
+
     @Override
-    public void onItemClick(View repoName, View repoDesc, View gitRepoImage, GitRepo gitRepo, int position) {
+    public void onItemClick(int repoView, View repoName, View repoDesc, View gitRepoImage, View descMore, GitRepo gitRepo, int position) {
+
+        int viewType = -1;
 
         Intent detailsIntent = new Intent(this, DemoDetails.class);
         detailsIntent.putExtra(AppConstants.GIT_REPO_NAME_KEY, gitRepo.getRepoName());
@@ -113,14 +122,43 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
         detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
         detailsIntent.putExtra(AppConstants.KEY_TITLE, "FADE"); // Todo : Use for toolbar later
 
-        Pair[] pairs = new Pair[3];
-        pairs[0] = new Pair<View, String>(repoName, "reponame");
-        pairs[1] = new Pair<View, String>(repoDesc, "repodesc");
-        pairs[2] = new Pair<View, String>(gitRepoImage, "repoimage");
+        Pair[] pairs = new Pair[4];
+        Bundle b = null;
 
-        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs).toBundle();
+        switch (repoView) {
 
-        startActivity(detailsIntent, bundle);
+            case REPO_NAME_VIEW_TYPE:
+                pairs[0] = new Pair<View, String>(repoName, "reponame");
+                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
+                b = makeSceneTransitionAnimation(this, repoName, "reponame").toBundle();
+                break;
+            case REPO_DESC_VIEW_TYPE:
+                pairs[0] = new Pair<View, String>(repoDesc, "repodesc");
+                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
+                b = makeSceneTransitionAnimation(this, repoName, "repodesc").toBundle();
+                break;
+            case REPO_IMAGE_VIEW_TYPE:
+                pairs[0] = new Pair<View, String>(gitRepoImage, "repoimage");
+                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
+                b = makeSceneTransitionAnimation(this, repoName, "repoimage").toBundle();
+                break;
+            case REPO_MORE_VIEW_TYPE:
+//                b = ActivityOptionsCompat.makeSceneTransitionAnimation(this, repoName, "repomore").toBundle();
+
+                pairs[0] = new Pair<View, String>(repoName, "reponame");
+                pairs[1] = new Pair<View, String>(repoDesc, "repodesc");
+                pairs[2] = new Pair<View, String>(gitRepoImage, "repoimage");
+                pairs[3] = new Pair<View, String>(gitRepoImage, "repomore");
+
+                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
+                b = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs).toBundle();
+                break;
+
+        }
+
+//        Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs).toBundle();
+
+        startActivity(detailsIntent, b);
 
     }
 }

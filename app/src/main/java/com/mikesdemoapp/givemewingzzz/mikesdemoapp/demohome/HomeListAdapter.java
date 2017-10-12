@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,17 +55,54 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
         holder.repoDesc.setText(gitRepo.getRepoDesc());
         Picasso.with(context).load(gitRepo.getRepoImage()).into(holder.gitRepoImage);
 
-        holder.detailsContainer.setOnClickListener(new View.OnClickListener() {
+//        holder.detailsContainer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (mClickListener != null) {
+//                    mClickListener.onItemClick(holder.repoName, holder.repoDesc, holder.gitRepoImage, gitRepo, position);
+//                }
+//            }
+//        });
+
+        holder.repoName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mClickListener != null) {
-                    mClickListener.onItemClick(holder.repoName, holder.repoDesc, holder.gitRepoImage, gitRepo, position);
+                    mClickListener.onItemClick(DemoHomeActivity.REPO_NAME_VIEW_TYPE, holder.repoName, holder.repoDesc, holder.gitRepoImage, holder.git_desc_more, gitRepo, position);
+                }
+            }
+        });
+
+        holder.repoDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mClickListener != null) {
+                    mClickListener.onItemClick(DemoHomeActivity.REPO_DESC_VIEW_TYPE, holder.repoName, holder.repoDesc, holder.gitRepoImage, holder.git_desc_more, gitRepo, position);
+                }
+            }
+        });
+
+        holder.gitRepoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mClickListener != null) {
+                    mClickListener.onItemClick(DemoHomeActivity.REPO_IMAGE_VIEW_TYPE, holder.repoName, holder.repoDesc, holder.gitRepoImage, holder.git_desc_more, gitRepo, position);
+                }
+            }
+        });
+
+        holder.git_desc_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mClickListener != null) {
+                    mClickListener.onItemClick(DemoHomeActivity.REPO_MORE_VIEW_TYPE, holder.repoName, holder.repoDesc, holder.gitRepoImage, holder.git_desc_more, gitRepo, position);
                 }
             }
         });
 
         animation = AnimationUtils.loadAnimation(context, R.anim.fade_in);
         holder.repoName.startAnimation(animation);
+        holder.repoDesc.startAnimation(animation);
         holder.gitRepoImage.startAnimation(animation);
 
     }
@@ -72,6 +110,13 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
     // total number of cells
     @Override
     public int getItemCount() {
+
+//        int length = mData.size();
+//
+//        length = (int) (Math.round(length * (0.25)));
+//
+//        Toast.makeText(context, "List count --> " + length, Toast.LENGTH_SHORT).show();
+
         return mData.size();
     }
 
@@ -80,6 +125,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
     public class MainViewHolder extends RecyclerView.ViewHolder {
         TextView repoName;
         TextView repoDesc;
+        Button git_desc_more;
         ImageView gitRepoImage;
         LinearLayout detailsContainer;
 
@@ -87,6 +133,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
             super(itemView);
             repoName = (TextView) itemView.findViewById(R.id.git_repo_name);
             repoDesc = (TextView) itemView.findViewById(R.id.git_repo_desc);
+            git_desc_more = (Button) itemView.findViewById(R.id.git_desc_more);
             gitRepoImage = (ImageView) itemView.findViewById(R.id.git_repo_icon);
             detailsContainer = (LinearLayout) itemView.findViewById(R.id.details_list_item_container);
         }
@@ -105,6 +152,6 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View repoName, View repoDesc, View gitRepoImage, GitRepo gitRepo, int position);
+        void onItemClick(int viewType, View repoName, View repoDesc, View gitRepoImage, View descMore, GitRepo gitRepo, int position);
     }
 }

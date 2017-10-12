@@ -25,8 +25,9 @@
     <dimen name="custom_map_marker_image">60dp</dimen>
     <dimen name="custom_profile_padding">8dp</dimen>
 
+    <integer name="anim_duration_very_very_long">200</integer>
     <integer name="anim_duration_very_long">1000</integer>
-    <integer name="anim_duration_long">500</integer>
+    <integer name="anim_duration_long">800</integer>
     <integer name="anim_duration_medium">300</integer>
 
     <dimen name="nav_header_vertical_spacing">16dp</dimen>

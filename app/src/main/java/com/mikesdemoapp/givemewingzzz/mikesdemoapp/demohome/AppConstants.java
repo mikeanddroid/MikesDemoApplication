@@ -70,6 +70,7 @@ public class AppConstants {
     }
 
     public static final String KEY_ANIM_TYPE = "KEY_ANIM_TYPE";
+    public static final String KEY_ANIM_TYPE2 = "KEY_ANIM_TYPE2";
     public static final String KEY_TITLE = "KEY_TITLE";
 
     public static enum TransitionType {
