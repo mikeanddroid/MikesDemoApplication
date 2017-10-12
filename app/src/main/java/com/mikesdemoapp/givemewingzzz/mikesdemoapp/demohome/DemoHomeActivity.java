@@ -145,8 +145,8 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
 
 //                pairs[0] = new Pair<View, String>(gitRepoImage, "repoimage");
 
-                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
-                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
+//                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
+//                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
                 b = makeSceneTransitionAnimation(this, gitRepoImage, "repoimage").toBundle();
 
                 break;
@@ -158,8 +158,8 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
 //                pairs[2] = new Pair<View, String>(gitRepoImage, "repoimage");
 //                pairs[3] = new Pair<View, String>(gitRepoImage, "repomore");
 
-                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Slide);
-                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
+//                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Slide);
+//                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
                 b = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gitRepoImage, "repoimage").toBundle();
                 break;
 

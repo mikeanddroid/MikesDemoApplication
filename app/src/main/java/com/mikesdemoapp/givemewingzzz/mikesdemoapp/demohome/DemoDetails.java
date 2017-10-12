@@ -160,65 +160,69 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
 
     private void initAnimation() {
 
-        switch (transitionType) {
+        if (transitionType != null) {
+            switch (transitionType) {
 
-            case Explode: { // For Explode By Code
-                Explode enterTransition = new Explode();
-                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
-                getWindow().setEnterTransition(enterTransition);
-                break;
-            }
+                case Explode: { // For Explode By Code
+                    Explode enterTransition = new Explode();
+                    enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
+                    getWindow().setEnterTransition(enterTransition);
+                    break;
+                }
 
-            case Slide: { // For Slide By Code
-                Slide enterTransition = new Slide();
-                enterTransition.setSlideEdge(Gravity.START);
-                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_very_long));
+                case Slide: { // For Slide By Code
+                    Slide enterTransition = new Slide();
+                    enterTransition.setSlideEdge(Gravity.END);
+                    enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_very_long));
 //                enterTransition.setInterpolator(new AnticipateOvershootInterpolator());
-                getWindow().setEnterTransition(enterTransition);
-                break;
-            }
+                    getWindow().setEnterTransition(enterTransition);
+                    break;
+                }
 
-            case Fade: { // For Fade By Code
-                Fade enterTransition = new Fade();
-                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_long));
-                getWindow().setEnterTransition(enterTransition);
-                break;
-            }
+                case Fade: { // For Fade By Code
+                    Fade enterTransition = new Fade();
+                    enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_long));
+                    getWindow().setEnterTransition(enterTransition);
+                    break;
+                }
 
+            }
         }
 
-        switch (transitionType2) {
+        if (transitionType2 != null) {
+            switch (transitionType2) {
 
-            case Explode: { // For Explode By Code
-                Explode enterTransition = new Explode();
-                enterTransition.setPathMotion(new PathMotion() {
-                    @Override
-                    public Path getPath(float v, float v1, float v2, float v3) {
-                        return null;
-                    }
-                });
-                enterTransition.setMode(Visibility.MODE_IN);
-                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_medium));
-                getWindow().setEnterTransition(enterTransition);
-                break;
-            }
+                case Explode: { // For Explode By Code
+                    Explode enterTransition = new Explode();
+                    enterTransition.setPathMotion(new PathMotion() {
+                        @Override
+                        public Path getPath(float v, float v1, float v2, float v3) {
+                            return null;
+                        }
+                    });
+                    enterTransition.setMode(Visibility.MODE_IN);
+                    enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_medium));
+                    getWindow().setEnterTransition(enterTransition);
+                    break;
+                }
 
-            case Slide: { // For Slide By Code
-                Slide enterTransition = new Slide();
-                enterTransition.setSlideEdge(Gravity.START);
-                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_very_long));
+                case Slide: { // For Slide By Code
+                    Slide enterTransition = new Slide();
+                    enterTransition.setSlideEdge(Gravity.END);
+                    enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_very_long));
 //                enterTransition.setInterpolator(new AnticipateOvershootInterpolator());
-                getWindow().setEnterTransition(enterTransition);
-                break;
-            }
+                    getWindow().setEnterTransition(enterTransition);
+                    break;
+                }
 
-            case Fade: { // For Fade By Code
-                Fade enterTransition = new Fade();
-                enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_long));
-                getWindow().setEnterTransition(enterTransition);
-                break;
-            }
+                case Fade: { // For Fade By Code
+                    Fade enterTransition = new Fade();
+                    enterTransition.setDuration(getResources().getInteger(R.integer.anim_duration_very_long));
+                    getWindow().setEnterTransition(enterTransition);
+                    break;
+                }
 
+            }
         }
 
     }
