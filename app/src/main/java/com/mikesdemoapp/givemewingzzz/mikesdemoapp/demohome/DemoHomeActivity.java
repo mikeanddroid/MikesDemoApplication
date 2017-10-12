@@ -119,7 +119,6 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
         detailsIntent.putExtra(AppConstants.GIT_REPO_NAME_KEY, gitRepo.getRepoName());
         detailsIntent.putExtra(AppConstants.GIT_REPO_DESC_KEY, gitRepo.getRepoDesc());
         detailsIntent.putExtra(AppConstants.GIT_REPO_POSITION_KEY, position);
-        detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
         detailsIntent.putExtra(AppConstants.KEY_TITLE, "FADE"); // Todo : Use for toolbar later
 
         Pair[] pairs = new Pair[4];
@@ -129,29 +128,39 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
 
             case REPO_NAME_VIEW_TYPE:
                 pairs[0] = new Pair<View, String>(repoName, "reponame");
+                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
                 detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
                 b = makeSceneTransitionAnimation(this, repoName, "reponame").toBundle();
                 break;
             case REPO_DESC_VIEW_TYPE:
-                pairs[0] = new Pair<View, String>(repoDesc, "repodesc");
+
+//                pairs[0] = new Pair<View, String>(repoDesc, "repodesc");
+
+                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
                 detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
-                b = makeSceneTransitionAnimation(this, repoName, "repodesc").toBundle();
+                b = makeSceneTransitionAnimation(this, repoDesc, "repodesc").toBundle();
                 break;
+
             case REPO_IMAGE_VIEW_TYPE:
-                pairs[0] = new Pair<View, String>(gitRepoImage, "repoimage");
+
+//                pairs[0] = new Pair<View, String>(gitRepoImage, "repoimage");
+
+                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
                 detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
-                b = makeSceneTransitionAnimation(this, repoName, "repoimage").toBundle();
+                b = makeSceneTransitionAnimation(this, gitRepoImage, "repoimage").toBundle();
+
                 break;
             case REPO_MORE_VIEW_TYPE:
 //                b = ActivityOptionsCompat.makeSceneTransitionAnimation(this, repoName, "repomore").toBundle();
 
-                pairs[0] = new Pair<View, String>(repoName, "reponame");
-                pairs[1] = new Pair<View, String>(repoDesc, "repodesc");
-                pairs[2] = new Pair<View, String>(gitRepoImage, "repoimage");
-                pairs[3] = new Pair<View, String>(gitRepoImage, "repomore");
+//                pairs[0] = new Pair<View, String>(repoName, "reponame");
+//                pairs[1] = new Pair<View, String>(repoDesc, "repodesc");
+//                pairs[2] = new Pair<View, String>(gitRepoImage, "repoimage");
+//                pairs[3] = new Pair<View, String>(gitRepoImage, "repomore");
 
+                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Slide);
                 detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
-                b = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs).toBundle();
+                b = ActivityOptionsCompat.makeSceneTransitionAnimation(this, gitRepoImage, "repoimage").toBundle();
                 break;
 
         }
