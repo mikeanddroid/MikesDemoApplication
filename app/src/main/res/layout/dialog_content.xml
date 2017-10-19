@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/demoItemDetailContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:selectableItemBackground"
+    android:elevation="4dp"
+    card_view:cardCornerRadius="1dp"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true">
+
+    <!-- Manually imitate an entire AlertDialog layout -->
+
+    <!-- See dialog specs on: https://material.google.com/components/dialogs.html#dialogs-specs -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/demoItemDetailImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:background="@color/grey_11"
+            android:contentDescription="@string/example_application"
+            android:padding="4dp"
+            android:transitionName="demoimage" />
+
+        <LinearLayout
+            android:id="@+id/imageInfoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/demoItemDetailImageName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="IMAGE TITLE"
+                android:textColor="@color/grey_3"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/demoItemDetailImageDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="image date"
+                android:textColor="@color/grey_3"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</android.support.v7.widget.CardView>

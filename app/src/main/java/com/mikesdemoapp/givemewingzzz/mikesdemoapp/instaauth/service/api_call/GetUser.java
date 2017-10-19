@@ -24,7 +24,7 @@ public class GetUser {
 //            @Override
 //            public void success(UserWrapper userUserWrapper, Response response) {
 //
-//                User user = userUserWrapper.getData();
+//                ImageDataModel user = userUserWrapper.getData();
 //
 //                Token token = new Token();
 //                token.setUserId(user.getUserId());
@@ -58,7 +58,7 @@ public class GetUser {
 //            @Override
 //            public void success(UserWrapper userUserWrapper, Response response) {
 //
-//                User user = userUserWrapper.getData();
+//                ImageDataModel user = userUserWrapper.getData();
 //
 //                EventBusSingleton.post(new ProfileSuccess());
 //

@@ -15,44 +15,66 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".demohome.DemoHomeActivity">
+        <activity
+            android:name=".examplecodes.LoadMoreListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".mapsclusterdemo.base.MapsClusterActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-
         <activity
             android:name=".demohome.DemoDetails"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-
         <activity
             android:name=".mapsclusterdemo.ui.MapLocationDetails"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".examplecodes.ImageDetailsActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/api_key" />
 
-        <!--Instagram stuff-->
+        <!-- Instagram stuff -->
 
-        <activity android:name=".instaauth.activities.InstagramDemoLogin" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".instaauth.activities.LandingPage" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".instaauth.core.CoreActivity" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".instaauth.activities.MediaList" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".instaauth.activities.MediaListDetails" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".instaauth.activities.TagSearchPage" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".instaauth.activities.TagsPage" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".instaauth.activities.InstagramDemoLogin"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".instaauth.activities.LandingPage"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".instaauth.core.CoreActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".instaauth.activities.MediaList"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".instaauth.activities.MediaListDetails"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".instaauth.activities.TagSearchPage"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".instaauth.activities.TagsPage"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
-        <!---->
+        <!--  -->
+        <activity
+            android:name=".demohome.DemoScrollActivity"
+            android:label="@string/title_activity_demo_scroll"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

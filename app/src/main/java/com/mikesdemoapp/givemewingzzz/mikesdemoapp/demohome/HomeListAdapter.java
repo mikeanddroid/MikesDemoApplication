@@ -36,6 +36,22 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
         this.mData = mData;
     }
 
+    public void addItems(String repoName, String repoDesc, int repoImage, boolean isActive) {
+        mData.add(new GitRepo(repoName, repoDesc, repoImage, isActive));
+        notifyDataSetChanged();
+    }
+
+    public void addItems(GitRepo gitRepo) {
+        mData.add(gitRepo);
+        notifyDataSetChanged();
+    }
+
+    public void removeItems(GitRepo gitRepo) {
+        mData.remove(gitRepo);
+        notifyDataSetChanged();
+//        notifyItemRangeChanged(position, mData.size());
+    }
+
     // inflates the cell layout from xml when needed
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -111,13 +127,14 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
     @Override
     public int getItemCount() {
 
-//        int length = mData.size();
-//
-//        length = (int) (Math.round(length * (0.25)));
-//
+        int length = mData.size();
+
+        length = (int) (Math.round(length * (0.50)));
+
 //        Toast.makeText(context, "List count --> " + length, Toast.LENGTH_SHORT).show();
 
-        return mData.size();
+//        return mData.size();
+        return length;
     }
 
 
@@ -143,6 +160,10 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
     // convenience method for getting data at click position
     public String getRepoName(int id) {
         return mData.get(id).getRepoName();
+    }
+
+    public GitRepo getItem(int position) {
+        return mData.get(position);
     }
 
     // allows clicks events to be caught

@@ -50,7 +50,7 @@ public class AppConstants {
 
     public static ArrayList<GitRepo> getDefaultList(Context context) {
 
-        String sampleDesc = context.getResources().getString(R.string.sample_desc);
+        final String sampleDesc = context.getResources().getString(R.string.sample_desc);
         String instaDesc = context.getResources().getString(R.string.insta_desc);
         String yelpDesc = context.getResources().getString(R.string.yelp_desc);
         String mapsDesc = context.getResources().getString(R.string.maps_desc);
@@ -74,7 +74,7 @@ public class AppConstants {
     public static final String KEY_TITLE = "KEY_TITLE";
 
     public static enum TransitionType {
-        Explode, Slide, Fade
+        Explode, Slide, Fade, Scale
     }
 
 }

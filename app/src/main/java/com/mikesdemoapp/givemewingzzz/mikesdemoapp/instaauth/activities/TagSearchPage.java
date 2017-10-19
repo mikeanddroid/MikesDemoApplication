@@ -295,7 +295,7 @@ public class TagSearchPage extends BaseAuthAppCompat implements MediaTagAdapter.
         RealmResults<UsersList> realmResults = realm.where(UsersList.class).findAll();
 
         for (UsersList usersList : realmResults) {
-            Log.d(TAG, "User Names : " + usersList.getUserName());
+            Log.d(TAG, "ImageDataModel Names : " + usersList.getUserName());
         }
 
         mediaUserSearchAdapter = new MediaUserSearchAdapter(this, realmResults, true);

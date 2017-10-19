@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="@string/user"
+                android:text="@string/imageDataModel"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="@string/user"
+                android:text="@string/imageDataModel"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
         </LinearLayout>

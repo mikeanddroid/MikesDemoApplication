@@ -20,15 +20,15 @@
         "and use of imagery guide visual treatments. These elements do far more than please the "
         "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
         "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
+        "interface that immerse the imageDataModel in the experience.\n"
+        "An emphasis on imageDataModel actions makes core functionality immediately apparent and provides "
+        "waypoints for the imageDataModel.\n\n"
 
         "Motion provides meaning.\n\n"
 
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
+        "Motion respects and reinforces the imageDataModel as the prime mover. Primary imageDataModel actions are "
         "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
+        "All action takes place in a single environment. Objects are presented to the imageDataModel without "
         "breaking the continuity of experience even as they transform and reorganize.\n"
         "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
         "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
@@ -67,7 +67,7 @@
         "Responsive elevation and dynamic elevation offsets.\n\n"
 
         "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
+        "to imageDataModel input (e.g., normal, focused, and pressed) or system events. These elevation "
         "changes are consistently implemented using dynamic elevation offsets.\n"
         "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
         "to the component’s resting state. They ensure that elevation changes are consistent "
@@ -84,10 +84,10 @@
         "whether on a per component basis or using the entire app layout.\n"
         "On a component level, components can move or be removed before they cause interference. "
         "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
+        "imageDataModel picks up a card, or it can move if a snackbar appears.\n"
         "On the layout level, design your app layout to minimize opportunities for interference. "
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
+        "when a imageDataModel tries to pick up one of cards.\n\n"
     </string>
 
     <string name="api_key">AIzaSyCCsbJ5RMwCqfED-QiUHziugWi0xyLPzrY</string>
@@ -97,7 +97,7 @@
     <string name="app_secret">ZqwtdRwTheAc9o4IPxYhaYLpiWL2BMMbuh8tgGTe</string>
     <string name="app_id">nprone_trial_f7SclzyoyBnn</string>
     <string name="maps_desc">Google Map cluster demo application</string>
-    <string name="insta_desc">A repo having the instagram API setup and ready for user if someone needs to build an app using Instagram API. The framwork will also support the use of network calls, Image downloading and a bunch of readymade api calls. A developer can just modify a few files to make it work in their way.</string>
+    <string name="insta_desc">A repo having the instagram API setup and ready for imageDataModel if someone needs to build an app using Instagram API. The framwork will also support the use of network calls, Image downloading and a bunch of readymade api calls. A developer can just modify a few files to make it work in their way.</string>
     <string name="yelp_desc">This repo is maily to demonstrate the use of Yelp API with the two step authentication process and combiing a few other resporces to build a simple Android application.</string>
     <string name="sample_desc">A material metaphor is the unifying theory of a rationalized space and a system of motion."
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
@@ -134,7 +134,7 @@
     <string name="error_conversion">There was a problem finding your request. Please try again.</string>
     <string name="error_server">There was a problem finding your request. Please try again.</string>
     <string name="error_unexpected">There was a problem finding your request. Please try again.</string>
-    <string name="user">User</string>
+    <string name="imageDataModel">User</string>
 
     <string name="search_for_tag">Search for #hashtag</string>
     <string name="search_for_user">Search for User</string>
@@ -144,6 +144,7 @@
     <string name="popular_tag_key">Popular Tags</string>
     <string name="skip_tags_page">Skip This</string>
     <string name="user_header_key">User Header</string>
+    <string name="title_activity_demo_scroll">DemoScrollActivity</string>
 
     <!---->
 </resources>

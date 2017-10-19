@@ -10,6 +10,10 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowContentTransitions">true</item>
 
+        <!-- Apply default style for dialogs -->
+
+        <item name="android:dialogTheme">@style/AppDialogTheme</item>
+
     </style>
 
     <style name="NoActionBar" parent="AppTheme">
@@ -32,6 +36,40 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <!-- No need for colorPrimary, colorPrimaryDark, colorAccent here
              this should go to the AppTheme -->
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Define your custom dialog theme here extending from base -->
+
+    <style name="AppDialogTheme" parent="AppTheme.NoActionBar">
+
+        <!-- Define color properties as desired -->
+
+        <item name="colorPrimary">@color/blue7</item>
+
+        <item name="colorPrimaryDark">#000</item>
+
+        <item name="android:textColorHighlight">@color/blue4</item>
+
+        <item name="colorAccent">@color/blue7</item>
+
+        <item name="colorControlNormal">@color/blue7</item>
+
+        <!-- Define window properties as desired -->
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="android:windowBackground">@color/grey_7</item>
+
+        <item name="android:windowIsFloating">true</item>
+
+        <item name="android:windowCloseOnTouchOutside">true</item>
+
     </style>
 
 </resources>

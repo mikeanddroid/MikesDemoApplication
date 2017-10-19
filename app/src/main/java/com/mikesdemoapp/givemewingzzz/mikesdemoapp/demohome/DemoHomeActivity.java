@@ -10,15 +10,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikesdemoapp.givemewingzzz.mikesdemoapp.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +37,9 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
 
     @BindView(R.id.expandedImage)
     ImageView expandedImageView;
+
+    @BindView(R.id.loadMore)
+    TextView loadMoreText;
 
     GridLayoutManager layoutManager;
 
@@ -62,18 +68,97 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
 
         layoutManager = new GridLayoutManager(this, 1);
 
-        for (GitRepo gitRepo : AppConstants.getDefaultList(this)) {
+        /*Add apps list*/
 
-            Log.i(TAG, "Demo Repo Name : " + gitRepo.getRepoName());
-
-        }
+        ArrayList<GitRepo> gitRepoArrayList = getDefaultAppList();
 
         recyclerView.setLayoutManager(layoutManager);
-        homeListAdapter = new HomeListAdapter(this, AppConstants.getDefaultList(this));
+        homeListAdapter = new HomeListAdapter(this, gitRepoArrayList);
         homeListAdapter.setClickListener(this);
 
         recyclerView.setAdapter(homeListAdapter);
 
+//        if ("SHOW LESS".equals(loadMoreText.getText().toString().trim())) {
+//            loadMoreText.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    getDefaultAppList();
+//                }
+//            });
+//        } else if ("LOAD MORE".equals(loadMoreText.getText().toString().trim())) {
+//
+//        }
+
+        loadMoreText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(DemoHomeActivity.this, "List count --> " + homeListAdapter.getItemCount(), Toast.LENGTH_SHORT).show();
+
+                if (homeListAdapter.getItemCount() < 0) {
+                    return;
+                }
+
+                if (loadMoreText.getText().toString().equals("LOAD MORE")) {
+                    if (homeListAdapter.getItemCount() <= 10) {
+                        loadMoreApps();
+                    } else {
+                        loadMoreText.setText("SHOW LESS");
+                    }
+                } else if (loadMoreText.getText().toString().equals("SHOW LESS")) {
+                    removeApps();
+                }
+
+            }
+        });
+
+    }
+
+    public void loadMoreApps() {
+        final String sampleDesc = getResources().getString(R.string.sample_desc);
+        final int listItemCount = 5;
+
+        for (int i = 0; i < listItemCount; i++) {
+
+            if (homeListAdapter.getItemCount() <= 10) {
+                homeListAdapter.addItems(new GitRepo("Demo App " + i, "Sample Description : " + sampleDesc, R.mipmap.github, false));
+            }
+
+        }
+
+    }
+
+    public void removeApps() {
+
+        int length = homeListAdapter.getItemCount() - 1;
+
+        for (int i = 3; i < length; i++) {
+
+            if (length >= 3) {
+                homeListAdapter.removeItems(homeListAdapter.getItem(i));
+            }
+
+        }
+
+    }
+
+    public ArrayList<GitRepo> getDefaultAppList() {
+        final String sampleDesc = getResources().getString(R.string.sample_desc);
+        String instaDesc = getResources().getString(R.string.insta_desc);
+        String yelpDesc = getResources().getString(R.string.yelp_desc);
+        String mapsDesc = getResources().getString(R.string.maps_desc);
+
+        ArrayList<GitRepo> gitRepoArrayList = new ArrayList<>();
+
+        gitRepoArrayList.add(new GitRepo(getString(R.string.maps_cluster_demo), mapsDesc, R.mipmap.github, true));
+        gitRepoArrayList.add(new GitRepo(getString(R.string.insta_auth_demo), instaDesc, R.mipmap.github, true));
+        gitRepoArrayList.add(new GitRepo(getString(R.string.yelp_auth_demo), yelpDesc, R.mipmap.github, true));
+
+        for (int i = gitRepoArrayList.size() - 1; i < 10; i++) {
+            gitRepoArrayList.add(new GitRepo("Demo App " + i, "Sample Description : " + sampleDesc, R.mipmap.github, false));
+        }
+
+        return gitRepoArrayList;
     }
 
     @Override
