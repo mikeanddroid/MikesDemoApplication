@@ -8,8 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -33,7 +36,10 @@ import com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome.AppConstants;
 import com.mikesdemoapp.givemewingzzz.mikesdemoapp.demohome.DemoUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 
@@ -48,10 +54,30 @@ import static android.support.v4.app.ActivityOptionsCompat.makeSceneTransitionAn
 public class LoadMoreListActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
+
     private List<ImageDataModel> mImageDataModels = new ArrayList<>();
+
+    HashMap<String, List<ImageDataModel>> imageMap = new HashMap<>();
+
     private UserAdapter mUserAdapter;
     private static final String TAG = LoadMoreListActivity.class.getSimpleName();
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
+    private boolean isListShowing = false;
+
+    private void switchStaggeredView() {
+        isListShowing = false;
+        mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(mUserAdapter);
+    }
+
+    private void switchLinearView() {
+        isListShowing = true;
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(mUserAdapter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +85,28 @@ public class LoadMoreListActivity extends AppCompatActivity {
         setContentView(R.layout.recycler_view_base_layout);
 
         ButterKnife.bind(this);
+        mRecyclerView = (RecyclerView) findViewById(R.id.baseRecycleView);
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL);
+        linearLayoutManager = new LinearLayoutManager(this);
 
-//        Toolbar mToolbar = (Toolbar) findViewById(R.id.baseToolbar);
-//        mToolbar.setTitle("LoadMoreRecycleView");
-
-//        addDefaultList(mImageDataModels);
-        addDefaultListFromUtils();
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.baseRecycleView);
         mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mUserAdapter = new UserAdapter(this);
+        mUserAdapter = new UserAdapter(this, getDefaultImageListFromUtils());
         mRecyclerView.setAdapter(mUserAdapter);
+
+//        switchStaggeredView();
+
+        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.base_switch_fab);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                if (!isListShowing) {
+//                    switchLinearView();
+                }
+
+            }
+        });
 
         mUserAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -95,19 +129,6 @@ public class LoadMoreListActivity extends AppCompatActivity {
         mUserAdapter.setOnItemClickListener(new LoadMoreAdapterListener() {
             @Override
             public void onClick(int position, ImageDataModel imageDataModel, View view) {
-
-//                MyDialogFragment dialogFrag = MyDialogFragment.getMyDialogFragment(imageDataModel);
-//
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                dialogFrag.show(fragmentManager, MyDialogFragment.MY_DIALOG_FRAGMENT_TAG);
-
-//                final Dialog dialogView = new Dialog(LoadMoreListActivity.this);
-//                dialogView.setContentView(R.layout.dialog_content);
-//
-//                ImageView imageView = (ImageView) dialogView.findViewById(R.id.demoItemDetailImageView);
-//                TextView imageViewName = (TextView) dialogView.findViewById(R.id.demoItemDetailImageName);
-//                TextView imageViewDate = (TextView) dialogView.findViewById(R.id.demoItemDetailImageDate);
-////                final ProgressBar progressBar = (ProgressBar) dialogView.findViewById(R.id.demoItemDetailProgressBar);
 //
                 String imageUrl = null;
                 String imageName = null;
@@ -116,39 +137,6 @@ public class LoadMoreListActivity extends AppCompatActivity {
                 imageUrl = imageDataModel.getImageUrl();
                 imageName = imageDataModel.getName();
                 imageDate = imageDataModel.getDate();
-//
-////                progressBar.setVisibility(View.VISIBLE);
-//
-//                GlideApp.with(LoadMoreListActivity.this).load(imageUrl).listener(new RequestListener<Drawable>() {
-//                    @Override
-//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-////                        progressBar.setVisibility(View.GONE);
-//                        return false;
-//                    }
-//                }).placeholder(new ColorDrawable(Color.BLACK)).fitCenter().into(imageView);
-//
-////                int imageWidth = imageView.getMeasuredWidth();
-////                int imageHeight = imageView.getMeasuredHeight();
-////
-////                if (imageWidth > imageHeight) {
-////
-////                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(imageWidth, imageHeight);
-////                    imageView.setLayoutParams(layoutParams);
-////
-////                } else {
-////                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(imageHeight, imageWidth);
-////                    imageView.setLayoutParams(layoutParams);
-////                }
-//
-//                imageViewName.setText(imageName);
-//                imageViewDate.setText(imageDate);
-//
-//                dialogView.show();
 
                 Bundle b = makeSceneTransitionAnimation(LoadMoreListActivity.this, view, "demoimage").toBundle();
 
@@ -173,27 +161,89 @@ public class LoadMoreListActivity extends AppCompatActivity {
 
         ImageDataModel imageDataModel = null;
 
-
         Log.d(TAG, "ImageDataModel IMAGE URLS SIZE --> " + DemoUtils.imageUrls().size());
 
+        Log.d(TAG, "ImageDataModel RANDOM IMG TYPE SIZE --> " + DemoUtils.Constants.getRandomImageType().size());
+
+        int randomPositionIndex = DemoUtils.randInt(0, DemoUtils.Constants.getRandomImageType().size() - 1);
+
+        Log.d(TAG, "ImageDataModel Random Index --> " + randomPositionIndex);
+
         imageDataModel = new ImageDataModel();
-        imageDataModel.setName("IMGUR Image " + i);
+
         imageDataModel.setDate(i + "/" + (i + 4) + "/" + 2017);
 
         Log.d(TAG, "Image URLS --> Index --> " + i + " : URLS --> " + DemoUtils.imageUrls().get(i));
 
-        imageDataModel.setImageUrl(DemoUtils.imageUrls().get(i));
+        imageDataModel.setImageCategory(DemoUtils.Constants.getRandomImageType().get(randomPositionIndex));
+
+        String imageType = imageDataModel.getImageCategory();
+        Log.d(TAG, "Map Image List : Image Type --> " + imageType);
+
+        String imageName = null;
+        String imageUrl = null;
+
+        switch (imageType) {
+
+            case DemoUtils.Constants.GAMING_TYPE:
+
+                imageName = DemoUtils.Constants.GAMING_TYPE;
+                imageUrl = DemoUtils.imageUrls().get(i);
+
+                break;
+
+            case DemoUtils.Constants.LANDSCAPE_TYPE:
+
+                imageName = DemoUtils.Constants.LANDSCAPE_TYPE;
+                imageUrl = DemoUtils.imageUrls().get(i);
+
+                break;
+
+            case DemoUtils.Constants.RANDOM_TYPE:
+
+                imageName = DemoUtils.Constants.RANDOM_TYPE;
+                imageUrl = DemoUtils.imageUrls().get(i);
+
+                break;
+
+            case DemoUtils.Constants.OTHERS_TYPE:
+
+                imageName = DemoUtils.Constants.OTHERS_TYPE;
+                imageUrl = DemoUtils.imageUrls().get(i);
+
+                break;
+
+        }
+
+        imageDataModel.setName("IMGUR Image " + i + " ( " + imageName + " ) ");
+        imageDataModel.setImageUrl(imageUrl);
 
         return imageDataModel;
     }
 
-    private void addDefaultListFromUtils() {
+    private List<ImageDataModel> getDefaultImageListFromUtils() {
 
-        for (int i = 1; i < 10; i++) {
-            ImageDataModel imageDataModel = addImageObj(i);
-            mImageDataModels.add(imageDataModel);
+        if (mImageDataModels.isEmpty()) {
+
+            for (int i = 0; i < 9; i++) {
+                ImageDataModel imageDataModel = addImageObj(i); // Todo : maybe add logic here to add items in groups
+                mImageDataModels.add(imageDataModel);
+
+                imageMap.put(mImageDataModels.get(i).getImageCategory(), mImageDataModels);
+
+            }
+
+            Collections.sort(mImageDataModels, new ExampleImageComparator());
+//            logImageMap(imageMap);
+
         }
 
+
+        return mImageDataModels;
+    }
+
+    private HashMap<String, List<ImageDataModel>> addDefaultImageMap() {
+        return imageMap;
     }
 
     private void addDefaultList(List<ImageDataModel> mImageDataModels) {
@@ -337,6 +387,215 @@ public class LoadMoreListActivity extends AppCompatActivity {
         }
     }
 
+    private void logImageMap(HashMap<String, List<ImageDataModel>> imageMap) {
+
+        Log.d(TAG, "logImageMap Image List : Image Size --> " + imageMap.size());
+
+        for (Map.Entry<String, List<ImageDataModel>> entry : imageMap.entrySet()) {
+
+            System.out.printf("Image Map Key Category : %s and Image List Value: %s %n", entry.getKey(), entry.getValue());
+
+            List<ImageDataModel> imageDataModelList = entry.getValue();
+
+            for (int i = 0; i < imageDataModelList.size() - 1; i++) {
+
+                Log.d(TAG, "Map Image List : Image Index " + i);
+
+                String imageType = null;
+                if (imageDataModelList.get(i) != null) {
+                    imageType = imageDataModelList.get(i).getImageCategory();
+                    Log.d(TAG, "Map Image List : Image Type --> " + imageType);
+                } else if (imageDataModelList.get(i) == null) {
+
+                    if (imageDataModelList.get(i + 1) != null) {
+                        imageType = imageDataModelList.get(i + 1).getImageCategory();
+                        Log.d(TAG, "Map Image List : Image Type --> " + imageType);
+                    }
+
+                } else {
+                    Log.d(TAG, "Map Image List : Image Type --> " + "NOT VALID");
+                }
+
+                String imageName = null;
+                String imageTy = null;
+                int imageCategoryStartIndex = -1;
+                ImageDataModel imageDataModel;
+
+                if (imageType != null) {
+                    switch (imageType) {
+
+                        case DemoUtils.Constants.GAMING_TYPE:
+
+                            imageCategoryStartIndex = DemoUtils.Constants.GAMING_TYPE_INDEX;
+                            Log.d(TAG, "Map Image List : Image Type Switch Index --> " + imageCategoryStartIndex);
+
+                            imageDataModel = imageDataModelList.get(i);
+
+                            if (imageDataModel != null) {
+                                imageName = imageDataModel.getName();
+                                imageTy = imageDataModel.getImageCategory();
+
+                                Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + imageName);
+                                Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + imageTy);
+
+                            } else {
+
+                                imageDataModel = imageDataModelList.get(i);
+
+                                if (imageDataModel != null) {
+                                    imageName = imageDataModel.getName();
+                                    imageTy = imageDataModel.getImageCategory();
+
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + imageName);
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + imageTy);
+
+                                } else {
+
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + "NAME NULL");
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + "TYPE NULL");
+
+                                }
+
+                            }
+
+                            break;
+
+                        case DemoUtils.Constants.LANDSCAPE_TYPE:
+
+                            imageCategoryStartIndex = DemoUtils.Constants.LANDSCAPE_TYPE_INDEX;
+                            Log.d(TAG, "Map Image List : Image Type Switch Index --> " + imageCategoryStartIndex);
+
+                            imageDataModel = imageDataModelList.get(i);
+
+                            if (imageDataModel != null) {
+                                imageName = imageDataModel.getName();
+                                imageTy = imageDataModel.getImageCategory();
+
+                                Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + imageName);
+                                Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + imageTy);
+
+                            } else {
+
+                                imageDataModel = imageDataModelList.get(i);
+
+                                if (imageDataModel != null) {
+                                    imageName = imageDataModel.getName();
+                                    imageTy = imageDataModel.getImageCategory();
+
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + imageName);
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + imageTy);
+
+                                } else {
+
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + "NAME NULL");
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + "TYPE NULL");
+
+                                }
+
+                            }
+
+                            break;
+
+                        case DemoUtils.Constants.RANDOM_TYPE:
+
+                            imageCategoryStartIndex = DemoUtils.Constants.RANDOM_TYPE_INDEX;
+                            Log.d(TAG, "Map Image List : Image Type Switch Index --> " + imageCategoryStartIndex);
+
+                            imageDataModel = imageDataModelList.get(i);
+
+                            if (imageDataModel != null) {
+                                imageName = imageDataModel.getName();
+                                imageTy = imageDataModel.getImageCategory();
+
+                                Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + imageName);
+                                Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + imageTy);
+
+                            } else {
+
+                                imageDataModel = imageDataModelList.get(i);
+
+                                if (imageDataModel != null) {
+                                    imageName = imageDataModel.getName();
+                                    imageTy = imageDataModel.getImageCategory();
+
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + imageName);
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + imageTy);
+
+                                } else {
+
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + "NAME NULL");
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + "TYPE NULL");
+
+                                }
+
+                            }
+
+                            break;
+
+                        case DemoUtils.Constants.OTHERS_TYPE:
+
+                            imageCategoryStartIndex = DemoUtils.Constants.OTHERS_TYPE_INDEX;
+                            Log.d(TAG, "Map Image List : Image Type Switch Index --> " + imageCategoryStartIndex);
+
+                            imageDataModel = imageDataModelList.get(i);
+
+                            if (imageDataModel != null) {
+                                imageName = imageDataModel.getName();
+                                imageTy = imageDataModel.getImageCategory();
+
+                                Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + imageName);
+                                Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + imageTy);
+
+                            } else {
+
+                                imageDataModel = imageDataModelList.get(i);
+
+                                if (imageDataModel != null) {
+                                    imageName = imageDataModel.getName();
+                                    imageTy = imageDataModel.getImageCategory();
+
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + imageName);
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + imageTy);
+
+                                } else {
+
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Name --> " + "NAME NULL");
+                                    Log.d(TAG, "Map Image List : Image Type Switch Image Type --> " + "TYPE NULL");
+
+                                }
+
+                            }
+
+                            break;
+
+                    }
+                }
+
+                Log.d(TAG, "Map Image List : Image Name --> " + imageName + " : Image Index --> " + i + " : Image Category Index --> " + imageCategoryStartIndex + " : Image Type --> " + imageTy);
+            }
+
+        }
+
+    }
+
+    /**
+     * @param i Index of the list
+     */
+    private void addMoreItemsMap(int i, List<ImageDataModel> mImageDataModels) {
+
+        if (mImageDataModels.get(i) != null) {
+
+            imageMap.put(mImageDataModels.get(i).getImageCategory(), mImageDataModels);
+
+            mUserAdapter.notifyDataSetChanged();
+            mUserAdapter.setLoaded();
+
+//            logImageMap(imageMap);
+
+        }
+
+    }
+
     private void addMoreItems() {
 
         /**/
@@ -352,7 +611,7 @@ public class LoadMoreListActivity extends AppCompatActivity {
         int endListIndex = 0;
 
         if (index + 3 < endImageIndex) {
-            endListIndex = index + 3;
+            endListIndex = index + 9;
         } else {
             endListIndex = endImageIndex;
         }
@@ -379,6 +638,100 @@ public class LoadMoreListActivity extends AppCompatActivity {
 
     }
 
+//    private void addMoreItems() {
+//
+//        /**/
+//
+////        Remove loading item
+//        mImageDataModels.remove(mImageDataModels.size() - 1);
+//        mUserAdapter.notifyItemRemoved(mImageDataModels.size());
+//
+//        // Todo : at this point, add the categoried model in the beginning of the list
+//
+//        int index = mImageDataModels.size() - 1;
+//
+//        Log.d(TAG, "ImageDataModel Current Index --> " + (index));
+//
+//        int endImageIndex = DemoUtils.imageUrls().size() - 1;
+//
+//        int end = DemoUtils.imageUrls().size() - (endImageIndex); // End Img index - 88
+//
+//        Log.d(TAG, "ImageDataModel End Img Index --> " + (end));
+//
+//        int endListIndex = 0;
+//
+//        int randomPositionIndex = DemoUtils.randInt(0, 3);
+//
+//        Log.d(TAG, "ImageDataModel Random Index --> " + randomPositionIndex);
+//
+//        if (index + 3 < end) {
+//            endListIndex = index + 3;
+//        } else {
+//            endListIndex = end;
+//        }
+//
+//        Log.d(TAG, "ImageDataModel End List Index --> " + (endListIndex));
+//        ImageDataModel imageDataModel;
+//
+//        for (int i = index; i <= endListIndex; i++) {
+//
+//            Log.d(TAG, "ImageDataModel Current Index In FOR --> " + (i));
+//
+//            imageDataModel = addImageObj(i);
+//
+//            if (imageDataModel != null) {
+//                Log.d(TAG, "ADDING MORE --> " + " Image NAME --> " + imageDataModel.getName());
+//                Log.d(TAG, "ADDING MORE -->ADDING " + " Image DATE --> " + imageDataModel.getDate());
+//                Log.d(TAG, "ADDING MORE --> " + " Image URL --> " + imageDataModel.getImageUrl());
+//                Log.d(TAG, "ADDING MORE --> " + " Image CATEGORY --> " + imageDataModel.getImageCategory());
+//
+//                Log.d(TAG, "ADDING MORE -->ADDING " + "Load More 3 Items");
+//
+//                // Todo : check for the type again
+//                mImageDataModels.add(imageDataModel);
+//
+//                mUserAdapter.notifyDataSetChanged();
+//                mUserAdapter.setLoaded();
+//
+////                addMoreItemsMap(i, mImageDataModels);
+//
+//            } else {
+//
+//                imageDataModel = addImageObj(i);
+//
+//                Log.d(TAG, "ADDING MORE -->ADDING INDEX + 1 " + "Load More 3 Items");
+//
+//                if (imageDataModel != null) {
+//                    Log.d(TAG, "ADDING MORE --> ADDING INDEX + 1 " + " Image NAME --> " + imageDataModel.getName());
+//                    Log.d(TAG, "ADDING MORE --> ADDING INDEX + 1 " + " Image DATE --> " + imageDataModel.getDate());
+//                    Log.d(TAG, "ADDING MORE --> ADDING INDEX + 1 " + " Image URL --> " + imageDataModel.getImageUrl());
+//                    Log.d(TAG, "ADDING MORE --> ADDING INDEX + 1 " + " Image CATEGORY --> " + imageDataModel.getImageCategory());
+//
+//                    Log.d(TAG, "Load More 3 Items");
+//
+//                    // Todo : check for the type again
+//                    mImageDataModels.add(imageDataModel);
+//
+////                    addMoreItemsMap(i, mImageDataModels);
+//                    mUserAdapter.notifyDataSetChanged();
+//                    mUserAdapter.setLoaded();
+//
+//
+//                }
+//                else {
+////                    addMoreItemsMap(i, mImageDataModels);
+////                    mUserAdapter.notifyDataSetChanged();
+////                    mUserAdapter.setLoaded();
+//                }
+//
+//            }
+//
+//        }
+//
+//        /**/
+//
+//    }
+
     private void removeItemsAndNotify(List<ImageDataModel> mImageDataModels) {
 
         //Remove loading item
@@ -397,7 +750,8 @@ public class LoadMoreListActivity extends AppCompatActivity {
 
     private static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView tvName;
-        TextView tvEmailId;
+        TextView tvDateId;
+        TextView tvCategoryId;
         ImageView imageView;
         ProgressBar progressBar;
         LinearLayout itemContainer;
@@ -405,7 +759,8 @@ public class LoadMoreListActivity extends AppCompatActivity {
         UserViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.loadMoreTVName);
-            tvEmailId = itemView.findViewById(R.id.loadMoreTVEmailId);
+            tvDateId = itemView.findViewById(R.id.loadMoreTVDateId);
+            tvCategoryId = itemView.findViewById(R.id.loadMoreTVImageCategory);
             imageView = itemView.findViewById(R.id.demoImageView);
             progressBar = itemView.findViewById(R.id.itemProgressBar);
             itemContainer = itemView.findViewById(R.id.demoItemContainer);
@@ -421,10 +776,23 @@ public class LoadMoreListActivity extends AppCompatActivity {
         }
     }
 
+    private static class CategoryViewHolder extends RecyclerView.ViewHolder {
+
+        TextView categoryType;
+        TextView categoryNumber;
+
+        CategoryViewHolder(View itemView) {
+            super(itemView);
+            categoryType = itemView.findViewById(R.id.imageCategoryName);
+            categoryNumber = itemView.findViewById(R.id.imageCategoryNumber);
+        }
+    }
+
     private class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private final int VIEW_TYPE_ITEM = 0;
         private final int VIEW_TYPE_LOADING = 1;
+        private final int VIEW_TYPE_IMAGE_CATEGORY = 2;
         private OnLoadMoreListener mOnLoadMoreListener;
         private LoadMoreAdapterListener loadMoreAdapterListener;
         private boolean isLoading;
@@ -433,9 +801,15 @@ public class LoadMoreListActivity extends AppCompatActivity {
         private int lastVisibleItem, totalItemCount;
         private int[] lastVisibleItems;
         private Context context;
+        private List<ImageDataModel> mImageDataModels;
+        private List<ImageDataModel> mGamingTypeImageList;
+        private List<ImageDataModel> mLandscapeImageList;
+        private List<ImageDataModel> mOtherImageList;
+        private List<ImageDataModel> mRandomImageList;
 
-        UserAdapter(Context context) {
+        public UserAdapter(Context context, List<ImageDataModel> mImageDataModels) {
             this.context = context;
+            this.mImageDataModels = mImageDataModels;
 
             final StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) mRecyclerView.getLayoutManager();
 
@@ -452,26 +826,31 @@ public class LoadMoreListActivity extends AppCompatActivity {
                     if (dy > 0) { //for vertical scrolling
 
                         // For Vertical Scrolling
-//            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-//            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                @Override
-//                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                    super.onScrolled(recyclerView, dx, dy);
-//
-//                    totalItemCount = linearLayoutManager.getItemCount();
-//                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-//
-//                    if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-//                        if (mOnLoadMoreListener != null) {
-//                            if (totalItemCount >= 0 && lastVisibleItem >= 4) {
-//                                mOnLoadMoreListener.onLoadMore();
+//                        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+//                        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                            @Override
+//                            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                                super.onScrollStateChanged(recyclerView, newState);
 //                            }
 //
-//                        }
-//                        isLoading = true;
-//                    }
-//                }
-//            });
+//                            @Override
+//                            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                                super.onScrolled(recyclerView, dx, dy);
+//
+//                                totalItemCount = linearLayoutManager.getItemCount();
+//                                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//
+//                                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+//                                    if (mOnLoadMoreListener != null) {
+//                                        if (totalItemCount >= 0 && lastVisibleItem >= 4) {
+//                                            mOnLoadMoreListener.onLoadMore();
+//                                        }
+//
+//                                    }
+//                                    isLoading = true;
+//                                }
+//                            }
+//                        });
 
                     } else if (dy < 0) {
 
@@ -525,20 +904,583 @@ public class LoadMoreListActivity extends AppCompatActivity {
 
         @Override
         public int getItemViewType(int position) {
-            return mImageDataModels.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+
+            int viewType;
+
+            if (mImageDataModels.get(position) == null) {
+
+                viewType = DemoUtils.Constants.VIEW_TYPE_LOADING_INDEX;
+
+            } else {
+
+                String imageCat = mImageDataModels.get(position).getImageCategory();
+
+                if (DemoUtils.Constants.GAMING_TYPE.equals(imageCat)) {
+
+                    viewType = DemoUtils.Constants.GAMING_TYPE_INDEX;
+
+                } else if (DemoUtils.Constants.LANDSCAPE_TYPE.equals(imageCat)) {
+
+                    viewType = DemoUtils.Constants.LANDSCAPE_TYPE_INDEX;
+
+                } else if (DemoUtils.Constants.OTHERS_TYPE.equals(imageCat)) {
+
+                    viewType = DemoUtils.Constants.OTHERS_TYPE_INDEX;
+
+                } else if (DemoUtils.Constants.RANDOM_TYPE.equals(imageCat)) {
+
+                    viewType = DemoUtils.Constants.RANDOM_TYPE_INDEX;
+
+                } else {
+
+                    viewType = DemoUtils.Constants.NULL_TYPE_INDEX;
+
+                }
+
+            }
+
+            return viewType != -1 ? viewType : -1;
         }
+
+        //        @Override
+//        public int getItemViewType(int position) {
+//
+//            if (mImageDataModels.get(position) == null) {
+//
+//                Log.d(TAG, "getItemViewType POSITION (+1)-->" + position + " : View TYPE -->" + DemoUtils.Constants.VIEW_TYPE_LOADING);
+//                return DemoUtils.Constants.VIEW_TYPE_LOADING_INDEX;
+//
+//            } else { // Todo : Maybe add logic here to check the position and then add category view
+//
+//                String viewType;
+//
+//                if (mImageDataModels.get(position) == null) {
+//
+//                    viewType = mImageDataModels.get(position - 1).getImageCategory();
+//                    Log.d(TAG, "getItemViewType POSITION (-1) -->" + position + " : View TYPE -->" + viewType);
+//
+//                } else {
+//
+//                    viewType = mImageDataModels.get(position).getImageCategory();
+//                    Log.d(TAG, "getItemViewType POSITION -->" + position + " : View TYPE -->" + viewType);
+//
+//                    switch (viewType) {
+//
+//                        case DemoUtils.Constants.GAMING_TYPE:
+//
+//                            int gamingIndex = DemoUtils.Constants.GAMING_TYPE_INDEX;
+//
+//                            String nextImageCategory = mImageDataModels.get(gamingIndex + 1).getImageCategory();
+//                            String currentImageCategory = mImageDataModels.get(gamingIndex).getImageCategory();
+//
+////                        int categoryTypeIndex = DemoUtils.Constants.CATEGORY_TYPE_INDEX;
+////
+////                        if (nextImageCategory.equals(currentImageCategory)) {
+////                            return categoryTypeIndex;
+////                        }
+//
+//                            return DemoUtils.Constants.GAMING_TYPE_INDEX;
+//
+//                        case DemoUtils.Constants.LANDSCAPE_TYPE:
+//
+//                            int landScapeIndex = DemoUtils.Constants.LANDSCAPE_TYPE_INDEX;
+//
+//                            String nextLandscapeCategory = mImageDataModels.get(landScapeIndex + 1).getImageCategory();
+//                            String currentLandscapeCategory = mImageDataModels.get(landScapeIndex).getImageCategory();
+//
+////                        int LandscapeCategoryTypeIndex = DemoUtils.Constants.CATEGORY_TYPE_INDEX;
+////
+////                        if (nextLandscapeCategory.equals(currentLandscapeCategory)) {
+////                            return LandscapeCategoryTypeIndex;
+////                        }
+//
+//                            return DemoUtils.Constants.LANDSCAPE_TYPE_INDEX;
+//
+//                        case DemoUtils.Constants.OTHERS_TYPE:
+//
+//                            int othersIndex = DemoUtils.Constants.OTHERS_TYPE_INDEX;
+//
+//                            String nextothersImageCategory = mImageDataModels.get(othersIndex + 1).getImageCategory();
+//                            String currentothersImageCategory = mImageDataModels.get(othersIndex).getImageCategory();
+//
+////                        int othersCategoryTypeIndex = DemoUtils.Constants.CATEGORY_TYPE_INDEX;
+////
+////                        if (nextothersImageCategory.equals(currentothersImageCategory)) {
+////                            return othersCategoryTypeIndex;
+////                        }
+//
+//                            return DemoUtils.Constants.OTHERS_TYPE_INDEX;
+//
+//                        case DemoUtils.Constants.RANDOM_TYPE:
+//
+//                            int randomImageIndex = DemoUtils.Constants.RANDOM_TYPE_INDEX;
+//
+//                            String nextrandomImageCategory = mImageDataModels.get(randomImageIndex + 1).getImageCategory();
+//                            String currentrandomImageCategory = mImageDataModels.get(randomImageIndex).getImageCategory();
+//
+////                        int randomCategoryTypeIndex = DemoUtils.Constants.CATEGORY_TYPE_INDEX;
+////
+////                        if (nextrandomImageCategory.equals(currentrandomImageCategory)) {
+////                            return randomCategoryTypeIndex;
+////                        }
+//
+//                            return DemoUtils.Constants.RANDOM_TYPE_INDEX;
+//
+//                        default:
+//                            return -1;
+//                    }
+//
+//                }
+//                return -1;
+//            }
+//
+//        }
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == VIEW_TYPE_ITEM) {
-                View view = LayoutInflater.from(LoadMoreListActivity.this).inflate(R.layout.layout_user_item, parent, false);
-                return new UserViewHolder(view);
-            } else if (viewType == VIEW_TYPE_LOADING) {
-                View view = LayoutInflater.from(LoadMoreListActivity.this).inflate(R.layout.layout_loading_item, parent, false);
-                return new LoadingViewHolder(view);
+
+            int layoutID = 0;
+            View view;
+
+            int gamingListCountCounter = -1;
+            int landscapeListCountCounter = -1;
+            int othersListCountCounter = -1;
+            int randomListCountCounter = -1;
+
+            switch (viewType) {
+
+                case DemoUtils.Constants.GAMING_TYPE_INDEX:
+
+                    layoutID = R.layout.layout_user_item;
+                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+                    return new UserViewHolder(view);
+
+                case DemoUtils.Constants.LANDSCAPE_TYPE_INDEX:
+
+                    layoutID = R.layout.layout_user_item;
+                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+                    return new UserViewHolder(view);
+
+                case DemoUtils.Constants.OTHERS_TYPE_INDEX:
+
+                    layoutID = R.layout.layout_user_item;
+                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+                    return new UserViewHolder(view);
+
+                case DemoUtils.Constants.RANDOM_TYPE_INDEX:
+
+                    layoutID = R.layout.layout_user_item;
+                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+                    return new UserViewHolder(view);
+
+                case DemoUtils.Constants.VIEW_TYPE_LOADING_INDEX:
+
+                    layoutID = R.layout.layout_loading_item;
+                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+
+                    return new LoadingViewHolder(view);
+
             }
+
+//            switch (viewType) {
+//
+//                case DemoUtils.Constants.GAMING_TYPE_INDEX:
+//
+//                    gamingListCountCounter++;
+//
+//                    mGamingTypeImageList = new ArrayList<>();
+//                    mGamingTypeImageList.add(mImageDataModels.get(DemoUtils.Constants.GAMING_TYPE_INDEX));
+//
+//                    layoutID = R.layout.layout_user_item;
+//                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+//
+//                    return new UserViewHolder(view);
+//
+//                case DemoUtils.Constants.LANDSCAPE_TYPE_INDEX:
+//
+//                    mLandscapeImageList = new ArrayList<>();
+//                    mLandscapeImageList.add(mImageDataModels.get(DemoUtils.Constants.LANDSCAPE_TYPE_INDEX));
+//
+//                    layoutID = R.layout.layout_user_item;
+//                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+//
+//                    return new UserViewHolder(view);
+//
+//                case DemoUtils.Constants.OTHERS_TYPE_INDEX:
+//
+//                    mOtherImageList = new ArrayList<>();
+//                    mOtherImageList.add(mImageDataModels.get(DemoUtils.Constants.OTHERS_TYPE_INDEX));
+//
+//                    layoutID = R.layout.layout_user_item;
+//                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+//
+//                    return new UserViewHolder(view);
+//
+//                case DemoUtils.Constants.RANDOM_TYPE_INDEX:
+//
+//                    mRandomImageList = new ArrayList<>();
+//                    mRandomImageList.add(mImageDataModels.get(DemoUtils.Constants.RANDOM_TYPE_INDEX));
+//
+//                    layoutID = R.layout.layout_user_item;
+//                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+//
+//                    return new UserViewHolder(view);
+//
+//                case DemoUtils.Constants.VIEW_TYPE_LOADING_INDEX:
+//
+//                    layoutID = R.layout.layout_loading_item;
+//                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+//
+//                    return new LoadingViewHolder(view);
+//
+//                case DemoUtils.Constants.CATEGORY_TYPE_INDEX:
+//
+//                    layoutID = R.layout.image_category_item;
+//                    view = LayoutInflater.from(parent.getContext()).inflate(layoutID, parent, false);
+//
+//                    return new CategoryViewHolder(view);
+//
+//            }
+
             return null;
+
         }
+
+        ImageDataModel imageDataModel = null;
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+
+            int viewType = getItemViewType(position);
+
+            Log.d(TAG, "Adapter View Type --> " + viewType);
+
+
+            CategoryViewHolder categoryViewHolder;
+            final UserViewHolder userViewHolder;
+
+            if (holder instanceof UserViewHolder) {
+
+                userViewHolder = (UserViewHolder) holder;
+                imageDataModel = mImageDataModels.get(position);
+                String imageTypeCategory = null;
+                String imageDate = null;
+                String imageName = null;
+                String imageUrl = null;
+
+                // Todo : Add logic here to add views
+
+                /**/
+
+                switch (viewType) {
+
+                    case DemoUtils.Constants.GAMING_TYPE_INDEX:
+
+                        imageName = imageDataModel.getName();
+                        imageUrl = imageDataModel.getImageUrl();
+                        imageDate = imageDataModel.getDate();
+                        imageTypeCategory = DemoUtils.Constants.GAMING_TYPE;
+
+                        break;
+
+                    case DemoUtils.Constants.LANDSCAPE_TYPE_INDEX:
+
+                        imageName = imageDataModel.getName();
+                        imageUrl = imageDataModel.getImageUrl();
+                        imageDate = imageDataModel.getDate();
+                        imageTypeCategory = DemoUtils.Constants.LANDSCAPE_TYPE;
+
+                        break;
+
+                    case DemoUtils.Constants.OTHERS_TYPE_INDEX:
+
+                        imageName = imageDataModel.getName();
+                        imageUrl = imageDataModel.getImageUrl();
+                        imageDate = imageDataModel.getDate();
+                        imageTypeCategory = DemoUtils.Constants.OTHERS_TYPE;
+
+                        break;
+
+                    case DemoUtils.Constants.RANDOM_TYPE_INDEX:
+
+
+                        imageName = imageDataModel.getName();
+                        imageUrl = imageDataModel.getImageUrl();
+                        imageDate = imageDataModel.getDate();
+                        imageTypeCategory = DemoUtils.Constants.GAMING_TYPE;
+
+                        break;
+
+                }
+
+                Log.d(TAG, "onBindViewHolder Adapter View Position --> " + position + "\n");
+                Log.d(TAG, "onBindViewHolder Image Name " + imageName);
+                Log.d(TAG, "onBindViewHolder Image Url " + imageUrl);
+                Log.d(TAG, "onBindViewHolder Image Date " + imageDate);
+                Log.d(TAG, "onBindViewHolder Image Category " + imageTypeCategory);
+
+                if (imageName == null) {
+                    userViewHolder.tvName.setText("NAME NULL");
+                } else {
+                    userViewHolder.tvName.setText(imageName);
+                }
+
+                if (imageDate == null) {
+                    userViewHolder.tvDateId.setText("DATE NULL");
+                } else {
+                    userViewHolder.tvDateId.setText(imageDate);
+                }
+
+                if (imageTypeCategory == null) {
+                    userViewHolder.tvName.setText("CATEGORY NULL");
+                } else {
+                    userViewHolder.tvCategoryId.setText(imageTypeCategory);
+                }
+
+                userViewHolder.progressBar.setVisibility(View.VISIBLE);
+
+                GlideApp.with(context).load(imageUrl).listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        userViewHolder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                }).placeholder(new ColorDrawable(Color.BLACK)).fitCenter().into(userViewHolder.imageView);
+//                        transition(GenericTransitionOptions.with(R.anim.scale_anim))
+
+                userViewHolder.itemContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        loadMoreAdapterListener.onClick(position, imageDataModel, userViewHolder.imageView);
+                    }
+                });
+
+                if (position > 1 && position % 3 == 0) {
+
+                    scale(userViewHolder.imageView);
+
+                } else {
+
+                    if (userViewHolder.imageView.getVisibility() == View.VISIBLE) {
+
+                        Animation out = AnimationUtils.makeInAnimation(context, true);
+                        userViewHolder.imageView.startAnimation(out);
+                        userViewHolder.imageView.setVisibility(View.VISIBLE);
+
+                    } else {
+
+                        Animation in = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+                        userViewHolder.imageView.startAnimation(in);
+                        userViewHolder.imageView.setVisibility(View.VISIBLE);
+
+                    }
+
+                }
+
+                /**/
+
+            } else if (holder instanceof LoadingViewHolder) {
+
+                Toast.makeText(context, "VIEW_TYPE_LOADING_INDEX", Toast.LENGTH_SHORT).show();
+                LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
+                loadingViewHolder.progressBar.setIndeterminate(true);
+
+            }
+
+//            else if (holder instanceof CategoryViewHolder) {
+//
+//                mGamingTypeImageList = new ArrayList<>();
+//                mGamingTypeImageList.add(mImageDataModels.get(position));
+//
+//                Toast.makeText(context, "VIEW_TYPE_GAMING_INDEX", Toast.LENGTH_SHORT).show();
+//                categoryViewHolder = (CategoryViewHolder) holder;
+//                categoryViewHolder.categoryType.setText(mImageDataModels.get(mGamingTypeImageList.size() - 1).getImageCategory());
+//
+//            }
+
+//            else if (holder instanceof CategoryViewHolder) {
+//                Toast.makeText(context, "VIEW_TYPE_LOADING_INDEX", Toast.LENGTH_SHORT).show();
+//            }
+
+//            switch (viewType) {
+//
+//                case DemoUtils.Constants.GAMING_TYPE_INDEX:
+//
+//                    Toast.makeText(context, "GAMING_TYPE_INDEX", Toast.LENGTH_SHORT).show();
+//
+////                    int gamingIndex = DemoUtils.Constants.GAMING_TYPE_INDEX;
+////
+////                    categoryViewHolder = (CategoryViewHolder) holder;
+////                    imageDataModel = mImageDataModels.get(gamingIndex);
+////
+////                    int oneLessGamingPosition = gamingIndex - 1; // For inserting one view of category type and rest of items
+////
+////                    categoryViewHolder.categoryType.setText(imageDataModel.getImageCategory());
+////                    categoryViewHolder.categoryNumber.setText("9");
+//
+//                    break;
+//
+//                case DemoUtils.Constants.LANDSCAPE_TYPE_INDEX:
+//
+//                    Toast.makeText(context, "LANDSCAPE_TYPE_INDEX", Toast.LENGTH_SHORT).show();
+////                    categoryViewHolder = (CategoryViewHolder) holder;
+//
+//                    break;
+//
+//                case DemoUtils.Constants.OTHERS_TYPE_INDEX:
+//
+//                    Toast.makeText(context, "OTHERS_TYPE_INDEX", Toast.LENGTH_SHORT).show();
+////                    categoryViewHolder = (CategoryViewHolder) holder;
+//
+//                    break;
+//
+//                case DemoUtils.Constants.RANDOM_TYPE_INDEX:
+//
+//                    Toast.makeText(context, "RANDOM_TYPE_INDEX", Toast.LENGTH_SHORT).show();
+////                    imageDataModel = mImageDataModels.get(position);
+////                    categoryViewHolder = (CategoryViewHolder) holder;
+//
+//                    break;
+//
+//                case DemoUtils.Constants.VIEW_TYPE_LOADING_INDEX:
+//
+//                    Toast.makeText(context, "VIEW_TYPE_LOADING_INDEX", Toast.LENGTH_SHORT).show();
+//                    LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
+//                    loadingViewHolder.progressBar.setIndeterminate(true);
+//
+//                    break;
+//
+//                case DemoUtils.Constants.VIEW_TYPE_ITEM_INDEX:
+//
+//                    Toast.makeText(context, "VIEW_TYPE_ITEM_INDEX", Toast.LENGTH_SHORT).show();
+//                    imageDataModel = mImageDataModels.get(position);
+//                    userViewHolder = (UserViewHolder) holder;
+//
+//                    userViewHolder.tvName.setText(imageDataModel.getName());
+//                    userViewHolder.tvDateId.setText(imageDataModel.getDate());
+//
+//                    userViewHolder.progressBar.setVisibility(View.VISIBLE);
+//
+//                    GlideApp.with(context).load(imageDataModel.getImageUrl()).listener(new RequestListener<Drawable>() {
+//                        @Override
+//                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//                            return false;
+//                        }
+//
+//                        @Override
+//                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                            userViewHolder.progressBar.setVisibility(View.GONE);
+//                            return false;
+//                        }
+//                    }).placeholder(new ColorDrawable(Color.BLACK)).fitCenter().into(userViewHolder.imageView);
+////                transition(GenericTransitionOptions.with(R.anim.scale_anim))
+//
+//                    if (position > 1 && position % 3 == 0) {
+//
+//                        scale(userViewHolder.imageView);
+//
+//                    } else {
+//
+//                        if (userViewHolder.imageView.getVisibility() == View.VISIBLE) {
+//
+//                            Animation out = AnimationUtils.makeInAnimation(context, true);
+//                            userViewHolder.imageView.startAnimation(out);
+//                            userViewHolder.imageView.setVisibility(View.VISIBLE);
+//
+//                        } else {
+//
+//                            Animation in = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+//                            userViewHolder.imageView.startAnimation(in);
+//                            userViewHolder.imageView.setVisibility(View.VISIBLE);
+//
+//                        }
+//
+//                    }
+//
+//                    userViewHolder.itemContainer.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            loadMoreAdapterListener.onClick(position, imageDataModel, userViewHolder.imageView);
+//                        }
+//                    });
+//
+//                    break;
+//
+//            }
+
+//            if (holder instanceof UserViewHolder) {
+//                final ImageDataModel imageDataModel = mImageDataModels.get(position);
+//                final UserViewHolder userViewHolder = (UserViewHolder) holder;
+//
+//                userViewHolder.tvName.setText(imageDataModel.getName());
+//                userViewHolder.tvDateId.setText(imageDataModel.getDate());
+//
+//                userViewHolder.progressBar.setVisibility(View.VISIBLE);
+//
+//                GlideApp.with(context).load(imageDataModel.getImageUrl()).listener(new RequestListener<Drawable>() {
+//                    @Override
+//                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                        userViewHolder.progressBar.setVisibility(View.GONE);
+//                        return false;
+//                    }
+//                }).placeholder(new ColorDrawable(Color.BLACK)).fitCenter().into(userViewHolder.imageView);
+////                transition(GenericTransitionOptions.with(R.anim.scale_anim))
+//
+//                if (position > 1 && position % 3 == 0) {
+//
+//                    scale(userViewHolder.imageView);
+//
+//                } else {
+//
+//                    if (userViewHolder.imageView.getVisibility() == View.VISIBLE) {
+//
+//                        Animation out = AnimationUtils.makeInAnimation(context, true);
+//                        userViewHolder.imageView.startAnimation(out);
+//                        userViewHolder.imageView.setVisibility(View.VISIBLE);
+//
+//                    } else {
+//
+//                        Animation in = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+//                        userViewHolder.imageView.startAnimation(in);
+//                        userViewHolder.imageView.setVisibility(View.VISIBLE);
+//
+//                    }
+//
+//                }
+//
+//                userViewHolder.itemContainer.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        loadMoreAdapterListener.onClick(position, imageDataModel, userViewHolder.imageView);
+//                    }
+//                });
+//
+//            } else if (holder instanceof LoadingViewHolder) {
+//                LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
+//                loadingViewHolder.progressBar.setIndeterminate(true);
+//            }
+
+        }
+
+        @Override
+        public int getItemCount() {
+//            int length = mImageDataModels.size();
+//            length = (int) (Math.round(length * (0.50)));
+//
+//            return mImageDataModels == null ? 0 : length;
+            return mImageDataModels == null ? 0 : mImageDataModels.size();
+        }
+
 
         public void scale(final View imageView) {
             ScaleAnimation scaleAnimation = new ScaleAnimation(3.0f, 1f, 3.0f, 1f, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
@@ -568,76 +1510,6 @@ public class LoadMoreListActivity extends AppCompatActivity {
                 }
 
             });
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof UserViewHolder) {
-                final ImageDataModel imageDataModel = mImageDataModels.get(position);
-                final UserViewHolder userViewHolder = (UserViewHolder) holder;
-
-                userViewHolder.tvName.setText(imageDataModel.getName());
-                userViewHolder.tvEmailId.setText(imageDataModel.getDate());
-
-                userViewHolder.progressBar.setVisibility(View.VISIBLE);
-
-                GlideApp.with(context).load(imageDataModel.getImageUrl()).listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        userViewHolder.progressBar.setVisibility(View.GONE);
-                        return false;
-                    }
-                }).placeholder(new ColorDrawable(Color.BLACK)).fitCenter().into(userViewHolder.imageView);
-//                transition(GenericTransitionOptions.with(R.anim.scale_anim))
-
-                if (position > 1 && position % 3 == 0) {
-
-                    scale(userViewHolder.imageView);
-
-                } else {
-
-                    if (userViewHolder.imageView.getVisibility() == View.VISIBLE) {
-
-                        Animation out = AnimationUtils.makeInAnimation(context, true);
-                        userViewHolder.imageView.startAnimation(out);
-                        userViewHolder.imageView.setVisibility(View.VISIBLE);
-
-                    } else {
-
-                        Animation in = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
-                        userViewHolder.imageView.startAnimation(in);
-                        userViewHolder.imageView.setVisibility(View.VISIBLE);
-
-                    }
-
-                }
-
-                userViewHolder.itemContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        loadMoreAdapterListener.onClick(position, imageDataModel, userViewHolder.imageView);
-                    }
-                });
-
-            } else if (holder instanceof LoadingViewHolder) {
-                LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
-                loadingViewHolder.progressBar.setIndeterminate(true);
-            }
-
-        }
-
-        @Override
-        public int getItemCount() {
-//            int length = mImageDataModels.size();
-//            length = (int) (Math.round(length * (0.50)));
-//
-//            return mImageDataModels == null ? 0 : length;
-            return mImageDataModels == null ? 0 : mImageDataModels.size();
         }
 
         void setLoaded() {

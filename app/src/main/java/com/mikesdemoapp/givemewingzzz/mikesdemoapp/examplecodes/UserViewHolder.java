@@ -17,6 +17,6 @@ class UserViewHolder extends RecyclerView.ViewHolder {
     public UserViewHolder(View itemView) {
         super(itemView);
         tvName = (TextView) itemView.findViewById(R.id.loadMoreTVName);
-        tvEmailId = (TextView) itemView.findViewById(R.id.loadMoreTVEmailId);
+        tvEmailId = (TextView) itemView.findViewById(R.id.loadMoreTVDateId);
     }
 }

@@ -152,7 +152,7 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
 
         gitRepoArrayList.add(new GitRepo(getString(R.string.maps_cluster_demo), mapsDesc, R.mipmap.github, true));
         gitRepoArrayList.add(new GitRepo(getString(R.string.insta_auth_demo), instaDesc, R.mipmap.github, true));
-        gitRepoArrayList.add(new GitRepo(getString(R.string.yelp_auth_demo), yelpDesc, R.mipmap.github, true));
+        gitRepoArrayList.add(new GitRepo(getString(R.string.material_image_demo), yelpDesc, R.mipmap.github, true));
 
         for (int i = gitRepoArrayList.size() - 1; i < 10; i++) {
             gitRepoArrayList.add(new GitRepo("Demo App " + i, "Sample Description : " + sampleDesc, R.mipmap.github, false));
@@ -212,10 +212,10 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
         switch (repoView) {
 
             case REPO_NAME_VIEW_TYPE:
-                pairs[0] = new Pair<View, String>(repoName, "reponame");
-                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
-                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
-                b = makeSceneTransitionAnimation(this, repoName, "reponame").toBundle();
+//                pairs[0] = new Pair<View, String>(repoName, "reponame");
+//                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE, AppConstants.TransitionType.Fade);
+//                detailsIntent.putExtra(AppConstants.KEY_ANIM_TYPE2, AppConstants.TransitionType.Slide);
+//                b = makeSceneTransitionAnimation(this, repoName, "reponame").toBundle();
                 break;
             case REPO_DESC_VIEW_TYPE:
 

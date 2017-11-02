@@ -9,6 +9,16 @@ public class ImageDataModel {
     private String date;
     private String imageUrl;
 
+    private String imageCategory;
+
+    public String getImageCategory() {
+        return imageCategory;
+    }
+
+    public void setImageCategory(String imageCategory) {
+        this.imageCategory = imageCategory;
+    }
+
     public String getName() {
         return name;
     }

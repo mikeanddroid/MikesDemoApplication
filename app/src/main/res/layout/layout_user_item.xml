@@ -60,11 +60,20 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/loadMoreTVEmailId"
+                android:id="@+id/loadMoreTVDateId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="Image Date"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/loadMoreTVImageCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Image Category"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
         </LinearLayout>

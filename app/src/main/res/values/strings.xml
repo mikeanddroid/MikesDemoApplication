@@ -94,6 +94,8 @@
     <string name="action_settings">Settings</string>
     <string name="work_so_far">WORK SO FAR </string>
     <string name="about_me">I am a focused application -oriented developer offering almost 7 years of experience in designing, developing, testing and maintaining quality applications for mobile and tablets on Android/iOS/Windows platforms.</string>
+    <string name="about_me_xx">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+
     <string name="app_secret">ZqwtdRwTheAc9o4IPxYhaYLpiWL2BMMbuh8tgGTe</string>
     <string name="app_id">nprone_trial_f7SclzyoyBnn</string>
     <string name="maps_desc">Google Map cluster demo application</string>
@@ -107,6 +109,7 @@
     <string name="maps_cluster_demo">Maps Cluster Demo</string>
     <string name="insta_auth_demo">Insta Auth Demo</string>
     <string name="yelp_auth_demo">Yelp Auth Demo</string>
+    <string name="material_image_demo">Material Image Grid Demo</string>
     <string name="git_repo_link">https://github.com/mikeanddroid</string>
     <string name="launch_demo">LAUNCH DEMO</string>
     <string name="details_trans">detailstransition</string>
