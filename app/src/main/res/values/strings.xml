@@ -99,6 +99,9 @@
     <string name="app_secret">ZqwtdRwTheAc9o4IPxYhaYLpiWL2BMMbuh8tgGTe</string>
     <string name="app_id">nprone_trial_f7SclzyoyBnn</string>
     <string name="maps_desc">Google Map cluster demo application</string>
+    <string name="mvp_and_dagger_desc">Demo application to demonstrate MVP and Dagger 2 implementation.</string>
+    <string name="just_mvp_desc">Demo application to demonstrate MVP</string>
+    <string name="mvp_rx_dagger_desc">Demo application to demonstrate MVP, Dagger2 and Rx implementation using a simple demo application.</string>
     <string name="insta_desc">A repo having the instagram API setup and ready for imageDataModel if someone needs to build an app using Instagram API. The framwork will also support the use of network calls, Image downloading and a bunch of readymade api calls. A developer can just modify a few files to make it work in their way.</string>
     <string name="yelp_desc">This repo is maily to demonstrate the use of Yelp API with the two step authentication process and combiing a few other resporces to build a simple Android application.</string>
     <string name="sample_desc">A material metaphor is the unifying theory of a rationalized space and a system of motion."
@@ -110,6 +113,9 @@
     <string name="insta_auth_demo">Insta Auth Demo</string>
     <string name="yelp_auth_demo">Yelp Auth Demo</string>
     <string name="material_image_demo">Material Image Grid Demo</string>
+    <string name="mvp_and_dagger">MVP and Dagger 2</string>
+    <string name="just_mvp">Just MVP</string>
+    <string name="mvp_rx_dagger">MVP Dagger n RX</string>
     <string name="git_repo_link">https://github.com/mikeanddroid</string>
     <string name="launch_demo">LAUNCH DEMO</string>
     <string name="details_trans">detailstransition</string>
@@ -150,4 +156,13 @@
     <string name="title_activity_demo_scroll">DemoScrollActivity</string>
 
     <!---->
+
+    <!--MVP Stuff-->
+    <string name="user_name">username</string>
+    <string name="password">password</string>
+    <string name="log_in">Log in</string>
+    <string name="title_activity_main">MVP Example</string>
+    <string name="username_error">Username cannot be empty</string>
+    <string name="password_error">Password cannot be empty</string>
+
 </resources>

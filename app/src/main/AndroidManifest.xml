@@ -39,7 +39,31 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".dagger2demowithmvp.Dagger2HomeActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".justmvploginflow.dagger2.mavenheroswithdagger2.utils.views.splashview.SplashScreenActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".justmvploginflow.dagger2.mavenheroswithdagger2.utils.views.heroesview.HeroesListActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".justmvploginflow.dagger2.mavenheroswithdagger2.utils.views.herodetails.HeroDetailsActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
             android:name=".examplecodes.ImageDetailsActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".justmvploginflow.dagger2.main.MainActivityMVC"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
+        <activity
+            android:name=".justmvploginflow.dagger2.loginflow.LoginActivityMVC"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
         <meta-data

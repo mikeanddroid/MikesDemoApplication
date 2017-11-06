@@ -8,7 +8,6 @@ import com.mikesdemoapp.givemewingzzz.mikesdemoapp.instaauth.utils.AppConstants;
 import com.squareup.okhttp.OkHttpClient;
 
 import io.realm.RealmObject;
-import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
 public class InstagramBaseClient {
@@ -48,7 +47,7 @@ public class InstagramBaseClient {
             Retrofit retrofit = new Retrofit.Builder()
                     .client(client)
                     .baseUrl(AppConstants.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+//                    .addConverterFactory(GsonConverterFactory.create(gson)) // Todo : Fix the converter later !!
                     .build();
 
             return retrofit.create(RetrofitInterface.class);

@@ -140,7 +140,7 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     /*
-     * Login Helper.
+     * dagger2 Helper.
      */
     public void startLoginActivity() {
         Intent intent = new Intent(this, InstagramDemoLogin.class);

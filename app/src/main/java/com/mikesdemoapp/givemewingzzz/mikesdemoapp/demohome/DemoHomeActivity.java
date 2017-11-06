@@ -147,12 +147,18 @@ public class DemoHomeActivity extends AppCompatActivity implements HomeListAdapt
         String instaDesc = getResources().getString(R.string.insta_desc);
         String yelpDesc = getResources().getString(R.string.yelp_desc);
         String mapsDesc = getResources().getString(R.string.maps_desc);
+        String mvpDaggerDesc = getResources().getString(R.string.mvp_and_dagger_desc);
+        String justMvpDesc = getResources().getString(R.string.just_mvp_desc);
+        String mvpDRxDesc = getResources().getString(R.string.mvp_rx_dagger_desc);
 
         ArrayList<GitRepo> gitRepoArrayList = new ArrayList<>();
 
         gitRepoArrayList.add(new GitRepo(getString(R.string.maps_cluster_demo), mapsDesc, R.mipmap.github, true));
         gitRepoArrayList.add(new GitRepo(getString(R.string.insta_auth_demo), instaDesc, R.mipmap.github, true));
         gitRepoArrayList.add(new GitRepo(getString(R.string.material_image_demo), yelpDesc, R.mipmap.github, true));
+        gitRepoArrayList.add(new GitRepo(getString(R.string.mvp_and_dagger), mvpDaggerDesc, R.mipmap.github, true));
+        gitRepoArrayList.add(new GitRepo(getString(R.string.just_mvp), justMvpDesc, R.mipmap.github, true));
+        gitRepoArrayList.add(new GitRepo(getString(R.string.mvp_rx_dagger), mvpDRxDesc, R.mipmap.github, true));
 
         for (int i = gitRepoArrayList.size() - 1; i < 10; i++) {
             gitRepoArrayList.add(new GitRepo("Demo App " + i, "Sample Description : " + sampleDesc, R.mipmap.github, false));

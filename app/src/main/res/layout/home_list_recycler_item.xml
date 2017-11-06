@@ -18,7 +18,7 @@
         android:layout_marginTop="@dimen/standard_view_padding"
         android:focusable="true"
         card_view:cardCornerRadius="1dp"
-        card_view:cardElevation="12dp">
+        card_view:cardElevation="8dp">
 
         <LinearLayout
             android:id="@+id/details_list_item_container"

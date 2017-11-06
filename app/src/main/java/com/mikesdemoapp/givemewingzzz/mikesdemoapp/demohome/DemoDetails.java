@@ -22,8 +22,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mikesdemoapp.givemewingzzz.mikesdemoapp.R;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.dagger2demowithmvp.Dagger2HomeActivity;
 import com.mikesdemoapp.givemewingzzz.mikesdemoapp.examplecodes.LoadMoreListActivity;
 import com.mikesdemoapp.givemewingzzz.mikesdemoapp.instaauth.activities.LandingPage;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.justmvploginflow.dagger2.loginflow.LoginActivityMVC;
+import com.mikesdemoapp.givemewingzzz.mikesdemoapp.justmvploginflow.dagger2.mavenheroswithdagger2.utils.views.splashview.SplashScreenActivity;
 import com.mikesdemoapp.givemewingzzz.mikesdemoapp.mapsclusterdemo.base.MapsClusterActivity;
 
 import butterknife.BindView;
@@ -83,7 +86,7 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
 
         git_repo_action.setOnClickListener(this);
 
-        // For overlap between Exiting  MainActivity.java and Entering TransitionActivity.java
+        // For overlap between Exiting  MainActivityMVC.java and Entering TransitionActivity.java
         getWindow().setAllowEnterTransitionOverlap(false);
 
     }
@@ -130,6 +133,13 @@ public class DemoDetails extends AppCompatActivity implements View.OnClickListen
                 intent = new Intent(DemoDetails.this, LoadMoreListActivity.class);
                 break;
             case 3:
+                intent = new Intent(DemoDetails.this, Dagger2HomeActivity.class);
+                break;
+            case 4:
+                intent = new Intent(DemoDetails.this, LoginActivityMVC.class);
+                break;
+            case 5:
+                intent = new Intent(DemoDetails.this, SplashScreenActivity.class);
                 break;
 
         }

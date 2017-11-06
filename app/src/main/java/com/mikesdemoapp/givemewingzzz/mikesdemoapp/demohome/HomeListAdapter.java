@@ -28,6 +28,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MainVi
     private ItemClickListener mClickListener;
     private Context context;
     private Animation animation;
+    String testComit1;
 
     // data is passed into the constructor
     public HomeListAdapter(Context context, ArrayList<GitRepo> mData) {
